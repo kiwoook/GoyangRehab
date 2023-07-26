@@ -31,6 +31,7 @@ public class Program extends BaseTimeEntity {
     @Column(name="registration_end_datetime", nullable = false)
     private LocalDateTime endDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="status", nullable = false)
     private RegistrationStatus status;
 
