@@ -22,8 +22,9 @@ public class Notice extends Board {
 
 
     @Builder
-    public Notice(Long id, String title, String content, String author, Integer view, NoticeCategory category) {
-        super(id, title, content, author, view);
+
+    public Notice(String title, String content, String author, Integer view, NoticeCategory category) {
+        super(title, content, author, view);
         this.category = category;
     }
 }

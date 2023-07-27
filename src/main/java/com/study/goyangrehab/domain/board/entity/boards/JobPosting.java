@@ -2,24 +2,26 @@ package com.study.goyangrehab.domain.board.entity.boards;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Event extends Board {
+public class JobPosting extends Board {
 
-    private LocalDate date;
-
+    @OneToOne(fetch = FetchType.LAZY)
+    private Reply reply;
 
     @Builder
-
-    public Event(String title, String content, String author, Integer view, LocalDate date) {
+    public JobPosting(String title, String content, String author, Integer view, Reply reply) {
         super(title, content, author, view);
-        this.date = date;
+        this.reply = reply;
     }
+
+
 }
