@@ -37,11 +37,17 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attachment> attachedFiles = new ArrayList<>();
 
+    public void addAttachedFile(Attachment attachment) {
+        this.attachedFiles.add(attachment);
+    }
+
     @Builder
-    public Board(String title, String content, String author, Integer view) {
+    public Board(String title, String content, String author, Integer view, List<Attachment> attachedFiles) {
         this.title = title;
         this.content = content;
         this.author = author;
         this.view = view;
+        this.attachedFiles = attachedFiles;
     }
+
 }
