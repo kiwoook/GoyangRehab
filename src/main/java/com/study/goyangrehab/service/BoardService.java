@@ -3,6 +3,7 @@ package com.study.goyangrehab.service;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Reply;
 import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.dto.BoardResponseDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,15 +11,23 @@ import java.util.List;
 
 public interface BoardService {
 
-    Board getBoardById(Long id);
+    BoardResponseDto getBoardById(Long id);
 
-    List<Board> getAllBoards();
+    List<BoardResponseDto> getAllBoards();
 
-    List<Board> getBoardsByAuthor(String author);
+    List<BoardResponseDto> getBoardsByCreator(String creator);
+
+    List<BoardResponseDto> getBoardsByTitle(String title);
+
+    List<BoardResponseDto> getBoardsByContent(String content);
+
+    List<BoardResponseDto> getBoardsByUserId(String userId);
+
+    List<BoardResponseDto> getBoardsByTitleOrContent(String query);
 
     void createBoard(BoardRequestDto boardRequestDto) throws IOException;
 
-    void updateBoard(BoardRequestDto boardRequestDto);
+    void updateBoard(Long id, BoardRequestDto boardRequestDto);
 
     void deleteBoard(Long id);
 

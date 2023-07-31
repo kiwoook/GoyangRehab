@@ -22,15 +22,15 @@ public class BoardRequestDto {
     private String content;
 
     @NotBlank
-    private String author;
+    private String creator;
 
     private Map<AttachmentType, List<MultipartFile>> attachmentFiles = new ConcurrentHashMap<>();
 
     @Builder
-    public BoardRequestDto(String title, String content, String author, Map<AttachmentType, List<MultipartFile>> attachmentFiles) {
+    public BoardRequestDto(String title, String content, String creator, Map<AttachmentType, List<MultipartFile>> attachmentFiles) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.creator = creator;
         this.attachmentFiles = attachmentFiles;
     }
 
@@ -38,7 +38,7 @@ public class BoardRequestDto {
         return Board.builder()
                 .title(title)
                 .content(content)
-                .author(author)
+                .creator(creator)
                 .attachedFiles(new ArrayList<>())
                 .view(0)
                 .build();

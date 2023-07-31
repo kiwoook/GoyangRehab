@@ -2,6 +2,7 @@ package com.study.goyangrehab.domain.board.entity;
 
 import com.study.goyangrehab.common.BaseTimeEntity;
 import com.study.goyangrehab.domain.file.entity.Attachment;
+import com.study.goyangrehab.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name="category")
 public class Board extends BaseTimeEntity {
 
     @Id
@@ -29,10 +31,10 @@ public class Board extends BaseTimeEntity {
     private String content;
 
     @Column(nullable = false)
-    private String author;
+    private String creator;
 
     @ColumnDefault("0")
-    private Integer view;
+    private Integer view = 0;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attachment> attachedFiles = new ArrayList<>();
@@ -41,11 +43,18 @@ public class Board extends BaseTimeEntity {
         this.attachedFiles.add(attachment);
     }
 
+    public void update(BoardRequestDto boardRequestDto, List<Attachment> attachments){
+        this.title = boardRequestDto.getTitle();
+        this.content = boardRequestDto.getContent();
+        this.creator = boardRequestDto.getCreator();
+        this.attachedFiles = attachments;
+    }
+
     @Builder
-    public Board(String title, String content, String author, Integer view, List<Attachment> attachedFiles) {
+    public Board(String title, String content, String creator, Integer view, List<Attachment> attachedFiles) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.creator = creator;
         this.view = view;
         this.attachedFiles = attachedFiles;
     }

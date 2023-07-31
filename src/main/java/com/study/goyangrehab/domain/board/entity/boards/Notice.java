@@ -1,20 +1,21 @@
 package com.study.goyangrehab.domain.board.entity.boards;
 
 import com.study.goyangrehab.domain.board.entity.Board;
+import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.enums.NoticeCategory;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DiscriminatorValue("notice")
 public class Notice extends Board {
-
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -22,9 +23,8 @@ public class Notice extends Board {
 
 
     @Builder
-
-    public Notice(String title, String content, String author, Integer view, NoticeCategory category) {
-        super(title, content, author, view);
+    public Notice(Board board, NoticeCategory category) {
+        super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
         this.category = category;
     }
 }

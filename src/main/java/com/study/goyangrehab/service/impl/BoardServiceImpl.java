@@ -6,6 +6,7 @@ import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.file.FileStore;
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import com.study.goyangrehab.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -28,19 +30,72 @@ public class BoardServiceImpl implements BoardService {
     private final FileStore fileStore;
 
     @Override
-    public Board getBoardById(Long id) {
+    public BoardResponseDto getBoardById(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 ID의 게시글을 찾을 수 없습니다."));
+
+        return new BoardResponseDto(board);
+    }
+
+    @Override
+    public List<BoardResponseDto> getAllBoards() {
+        logger.info("getAllBoards 실행");
+        List<Board> boards = boardRepository.findAll();
+        List<BoardResponseDto> boardRequestDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardRequestDtoList.add(new BoardResponseDto(board));
+        }
+        return boardRequestDtoList;
+    }
+
+    @Override
+    public List<BoardResponseDto> getBoardsByCreator(String creator) {
+        logger.info("getBoardsByCreator 실행");
+        List<Board> boards = boardRepository.findAllByCreatorContaining(creator).orElseThrow(() -> new RuntimeException(creator + "가 존재하지 않습니다"));
+        List<BoardResponseDto> boardRequestDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardRequestDtoList.add(new BoardResponseDto(board));
+        }
+        return boardRequestDtoList;
+    }
+
+    @Override
+    public List<BoardResponseDto> getBoardsByTitle(String title) {
+        logger.info("getBoardsByTitle 실행");
+        List<Board> boards = boardRepository.findAllByTitleContaining(title).orElseThrow(() -> new RuntimeException(title + "해당 제목이 존재하지 않습니다."));
+        List<BoardResponseDto> boardRequestDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardRequestDtoList.add(new BoardResponseDto(board));
+        }
+        return boardRequestDtoList;
+    }
+
+    @Override
+    public List<BoardResponseDto> getBoardsByContent(String content) {
+        logger.info("getBoardsByContent 실행");
+        List<Board> boards = boardRepository.findAllByContentContaining(content).orElseThrow(() -> new RuntimeException(content + "해당 내용이 존재하지 않습니다."));
+        List<BoardResponseDto> boardRequestDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardRequestDtoList.add(new BoardResponseDto(board));
+        }
+        return boardRequestDtoList;
+    }
+
+    @Override
+    public List<BoardResponseDto> getBoardsByUserId(String userId) {
         return null;
     }
 
     @Override
-    public List<Board> getAllBoards() {
-        return null;
+    public List<BoardResponseDto> getBoardsByTitleOrContent(String query) {
+        logger.info("getBoardsByTitleOrContent");
+        List<Board> boards = boardRepository.findByTitleContainingOrContentContaining(query, query).orElseThrow(() -> new RuntimeException(query + "해당 제목과 내용이 존재하지 않습니다"));
+        List<BoardResponseDto> boardRequestDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardRequestDtoList.add(new BoardResponseDto(board));
+        }
+        return boardRequestDtoList;
     }
 
-    @Override
-    public List<Board> getBoardsByAuthor(String author) {
-        return null;
-    }
 
     @Override
     public void createBoard(BoardRequestDto boardRequestDto) throws IOException {
@@ -54,8 +109,12 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
     }
 
+
+
     @Override
-    public void updateBoard(BoardRequestDto boardRequestDto) {
+    public void updateBoard(Long id, BoardRequestDto boardRequestDto) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 ID의 게시글을 찾을 수 없습니다."));
+
 
     }
 
@@ -63,10 +122,12 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void deleteBoard(Long id) {
 
+
     }
 
     @Override
     public void addReplyToBoard(Long boardId, Reply reply) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("해당 ID의 게시글을 찾을 수 없습니다."));
 
     }
 }
