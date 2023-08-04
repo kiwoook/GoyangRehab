@@ -11,7 +11,7 @@ public interface QnAService {
 
     void updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException;
 
-    void addReplyToBoard(Long id, Reply reply);
+    void addReplyToQnA(Long id, BoardRequestDto boardRequestDto) throws IOException;
 
 
 }

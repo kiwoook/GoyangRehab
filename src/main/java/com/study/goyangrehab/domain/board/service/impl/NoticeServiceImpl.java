@@ -39,10 +39,7 @@ public class NoticeServiceImpl implements NoticeService {
         Board board = boardRequestDto.toEntity();
         boardRepository.save(board);
 
-        Notice notice = Notice.builder()
-                .board(board)
-                .category(category)
-                .build();
+        Notice notice = new Notice(board,category);
         attachments.forEach(notice::addAttachedFile);
 
         boardRepository.save(notice);
@@ -57,13 +54,8 @@ public class NoticeServiceImpl implements NoticeService {
 
         boardRepository.save(board);
 
-        Notice notice = Notice.builder()
-                .board(board)
-                .category(category)
-                .build();
-
+        Notice notice = new Notice(board, category);
 
         boardRepository.save(notice);
-
     }
 }

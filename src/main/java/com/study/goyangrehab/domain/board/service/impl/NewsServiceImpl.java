@@ -37,9 +37,7 @@ public class NewsServiceImpl implements NewsService {
         Board board = boardRequestDto.toEntity();
         boardRepository.save(board);
 
-        News news = News.builder()
-                .board(board)
-                .build();
+        News news = new News(board);
 
         attachments.forEach(news::addAttachedFile);
 
@@ -56,9 +54,7 @@ public class NewsServiceImpl implements NewsService {
 
         boardRepository.save(board);
 
-        News news = News.builder()
-                .board(board)
-                .build();
+        News news = new News(board);
 
         boardRepository.save(news);
     }

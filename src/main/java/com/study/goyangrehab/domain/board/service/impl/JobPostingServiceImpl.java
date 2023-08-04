@@ -3,6 +3,7 @@ package com.study.goyangrehab.domain.board.service.impl;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.JobPosting;
 import com.study.goyangrehab.domain.board.entity.boards.News;
+import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.service.JobPostingService;
 import com.study.goyangrehab.domain.file.entity.Attachment;
@@ -36,9 +37,7 @@ public class JobPostingServiceImpl implements JobPostingService {
         Board board = boardRequestDto.toEntity();
         boardRepository.save(board);
 
-        JobPosting jobPosting = JobPosting.builder()
-                .board(board)
-                .build();
+        JobPosting jobPosting = new JobPosting(board);
 
         attachments.forEach(jobPosting::addAttachedFile);
 
@@ -46,7 +45,18 @@ public class JobPostingServiceImpl implements JobPostingService {
     }
 
     @Override
-    public void updateJobPosting(Long id, BoardRequestDto boardRequestDto) {
+    public void updateJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException {
+        List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
+
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "해당 아이디가 존재하지 않습니다."));
+        board.update(boardRequestDto, attachments);
+
+        boardRepository.save(board);
+
+        JobPosting jobPosting = new JobPosting(board);
+
+
+        boardRepository.save(jobPosting);
 
     }
 

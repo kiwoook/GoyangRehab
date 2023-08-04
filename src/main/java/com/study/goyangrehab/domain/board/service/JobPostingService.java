@@ -8,5 +8,5 @@ public interface JobPostingService {
 
     void createJobPosting(BoardRequestDto boardRequestDto) throws IOException;
 
-    void updateJobPosting(Long id, BoardRequestDto boardRequestDto);
+    void updateJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException;
 }

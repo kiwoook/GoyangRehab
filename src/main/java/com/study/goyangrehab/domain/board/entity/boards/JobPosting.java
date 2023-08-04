@@ -1,7 +1,6 @@
 package com.study.goyangrehab.domain.board.entity.boards;
 
 import com.study.goyangrehab.domain.board.entity.Board;
-import com.study.goyangrehab.domain.file.entity.Attachment;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,8 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
@@ -22,8 +20,8 @@ public class JobPosting extends Board {
     @OneToOne(fetch = FetchType.LAZY)
     private Reply reply;
 
-    @Builder
+
     public JobPosting(Board board) {
-        super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());        this.reply = reply;
+        super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
     }
 }

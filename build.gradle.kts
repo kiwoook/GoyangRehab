@@ -1,11 +1,16 @@
+import com.ewerk.gradle.plugins.tasks.QuerydslCompile
+
+
 plugins {
     java
     id("org.springframework.boot") version "3.1.2"
     id("io.spring.dependency-management") version "1.1.2"
+    id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
 }
 
 group = "com.study"
 version = "0.0.1-SNAPSHOT"
+val queryDslVersion = "5.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -32,8 +37,36 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    implementation("com.querydsl:querydsl-jpa:${queryDslVersion}")
+    annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.getByName<Jar>("jar") {
+    enabled = false
+}
+val querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets.getByName("main") {
+    java.srcDir(querydslDir)
+}
+configurations {
+    named("querydsl") {
+        extendsFrom(configurations.compileClasspath.get())
+    }
+}
+tasks.withType<QuerydslCompile> {
+    options.annotationProcessorPath = configurations.querydsl.get()
+}
+
