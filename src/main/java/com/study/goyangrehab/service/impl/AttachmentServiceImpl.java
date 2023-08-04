@@ -5,7 +5,6 @@ import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.domain.file.repository.AttachmentRepository;
 import com.study.goyangrehab.enums.AttachmentType;
 import com.study.goyangrehab.service.AttachmentService;
-import com.study.goyangrehab.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +34,7 @@ public class AttachmentServiceImpl implements AttachmentService {
         List<Attachment> generalFiles = fileStore.storeFiles(multipartFileListMap.get(AttachmentType.GENERAL), AttachmentType.GENERAL);
         return Stream.of(imageFiles, generalFiles)
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

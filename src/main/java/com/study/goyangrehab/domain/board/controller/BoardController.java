@@ -1,10 +1,12 @@
 package com.study.goyangrehab.domain.board.controller;
 
-import com.study.goyangrehab.domain.board.service.impl.*;
+import com.study.goyangrehab.domain.board.service.impl.EventServiceImpl;
+import com.study.goyangrehab.domain.board.service.impl.JobPostingServiceImpl;
+import com.study.goyangrehab.domain.board.service.impl.NewsServiceImpl;
+import com.study.goyangrehab.domain.board.service.impl.NoticeServiceImpl;
 import com.study.goyangrehab.dto.BoardAddForm;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
-import com.study.goyangrehab.enums.BoardCategory;
 import com.study.goyangrehab.enums.NoticeCategory;
 import com.study.goyangrehab.service.impl.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -29,50 +31,49 @@ public class BoardController {
     private final JobPostingServiceImpl jobPostingService;
     private final NewsServiceImpl newsService;
     private final NoticeServiceImpl noticeService;
-    private final QnAServiceImpl qnaService;
     private final BoardServiceImpl boardService;
 
     @PostMapping
-    public ResponseEntity<BoardResponseDto> createBoard(@ModelAttribute BoardAddForm boardAddForm){
+    public ResponseEntity<BoardResponseDto> createBoard(@ModelAttribute BoardAddForm boardAddForm) {
         return null;
     }
 
     // READ
     @GetMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long id){
-        try{
+    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long id) {
+        try {
             BoardResponseDto boardResponseDto = boardService.getBoardById(id);
             return ResponseEntity.ok().body(boardResponseDto);
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
 
-
-//    CREATE
+    //    CREATE
     @PostMapping("/event")
     public ResponseEntity<BoardResponseDto> createEvent(
             @ModelAttribute BoardAddForm boardAddForm,
-            @RequestParam(value="date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-            ){
+            @RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
-        try{
+        try {
             eventService.createEvent(boardRequestDto, date);
             return ResponseEntity.ok().build();
-        }catch(IOException e){
+        } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
     }
+
     @PostMapping("/jobposting")
     public ResponseEntity<BoardResponseDto> createJobPosting(
             @ModelAttribute BoardAddForm boardAddForm
-    ){
+    ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
-        try{
+        try {
             jobPostingService.createJobPosting(boardRequestDto);
             return ResponseEntity.ok().build();
-        }catch(IOException e){
+        } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -80,12 +81,12 @@ public class BoardController {
     @PostMapping("/news")
     public ResponseEntity<BoardResponseDto> createNews(
             @ModelAttribute BoardAddForm boardAddForm
-    ){
+    ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
-        try{
+        try {
             newsService.createNews(boardRequestDto);
             return ResponseEntity.ok().build();
-        }catch(IOException e){
+        } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -93,18 +94,16 @@ public class BoardController {
     @PostMapping("/notice")
     public ResponseEntity<BoardResponseDto> createNotice(
             @ModelAttribute BoardAddForm boardAddForm,
-            @RequestParam(value="category") NoticeCategory category
-            ){
+            @RequestParam(value = "category") NoticeCategory category
+    ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
-        try{
+        try {
             noticeService.createNotice(boardRequestDto, category);
             return ResponseEntity.ok().build();
-        }catch(IOException e){
+        } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
     }
-
-
 
 
 //  reply

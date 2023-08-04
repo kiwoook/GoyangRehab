@@ -5,10 +5,8 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
@@ -24,7 +22,7 @@ public class QnA extends Board {
         super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
     }
 
-    public void addReply(Reply reply){
+    public void addReply(Reply reply) {
         this.reply = reply;
     }
 
