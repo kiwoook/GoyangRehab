@@ -1,6 +1,5 @@
 package com.study.goyangrehab.domain.board.service;
 
-import com.study.goyangrehab.domain.board.entity.boards.Reply;
 import com.study.goyangrehab.dto.BoardRequestDto;
 
 import java.io.IOException;

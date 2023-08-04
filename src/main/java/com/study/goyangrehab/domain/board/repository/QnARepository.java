@@ -1,6 +1,5 @@
 package com.study.goyangrehab.domain.board.repository;
 
-import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.QnA;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,6 @@
 package com.study.goyangrehab.dto;
 
 import com.study.goyangrehab.enums.AttachmentType;
-import com.study.goyangrehab.enums.BoardCategory;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;

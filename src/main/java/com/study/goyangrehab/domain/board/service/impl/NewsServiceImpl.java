@@ -2,7 +2,6 @@ package com.study.goyangrehab.domain.board.service.impl;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.News;
-import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.service.NewsService;
 import com.study.goyangrehab.domain.file.entity.Attachment;
@@ -27,6 +26,7 @@ public class NewsServiceImpl implements NewsService {
     static final Logger logger = LogManager.getLogger(NewsServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+
     @Override
     public void createNews(BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());

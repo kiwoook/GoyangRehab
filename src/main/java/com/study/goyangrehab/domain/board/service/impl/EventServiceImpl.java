@@ -2,8 +2,6 @@ package com.study.goyangrehab.domain.board.service.impl;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Event;
-import com.study.goyangrehab.domain.board.entity.boards.JobPosting;
-import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.service.EventService;
 import com.study.goyangrehab.domain.file.entity.Attachment;
@@ -28,6 +26,7 @@ public class EventServiceImpl implements EventService {
     static final Logger logger = LogManager.getLogger(EventServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+
     @Override
     public void createEvent(BoardRequestDto boardRequestDto, LocalDate date) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
