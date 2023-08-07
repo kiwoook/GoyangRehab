@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface QnARepository extends JpaRepository<QnA, Long> {
+public interface QnARepository extends JpaRepository<QnA, Long>{
     @NonNull Optional<QnA> findById(@NonNull Long id);
 
 }

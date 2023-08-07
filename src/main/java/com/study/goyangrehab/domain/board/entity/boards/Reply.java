@@ -2,8 +2,7 @@ package com.study.goyangrehab.domain.board.entity.boards;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.dto.BoardRequestDto;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +12,16 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("reply")
 public class Reply extends Board {
 
+
+    @OneToOne
+    private Board board;
+
     public Reply(Board board) {
-        super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
+        super("Re:"+board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
+    }
+
+    public void addReply(Board board){
+        this.board = board;
     }
 
     public static Reply createReplyFromDto(BoardRequestDto boardRequestDto) {

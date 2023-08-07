@@ -1,10 +1,14 @@
 package com.study.goyangrehab.domain.board.service;
 
 import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.dto.BoardResponseDto;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface QnAService {
+
+    List<BoardResponseDto> getQnABoardList(Integer page);
 
     void createQnA(BoardRequestDto boardRequestDto) throws IOException;
 

@@ -40,7 +40,6 @@ public class BoardRequestDto {
                 .content(content)
                 .creator(creator)
                 .attachedFiles(new ArrayList<>())
-                .view(0)
                 .build();
     }
 

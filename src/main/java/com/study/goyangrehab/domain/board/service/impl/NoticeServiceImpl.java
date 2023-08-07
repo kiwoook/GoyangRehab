@@ -49,7 +49,7 @@ public class NoticeServiceImpl implements NoticeService {
     public void updateNotice(Long id, BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
-        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "해당 아이디가 존재하지 않습니다."));
+        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
         board.update(boardRequestDto, attachments);
 
         boardRepository.save(board);

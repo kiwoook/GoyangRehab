@@ -6,7 +6,9 @@ import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.service.EventService;
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.dto.EventResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Transactional
@@ -26,6 +30,15 @@ public class EventServiceImpl implements EventService {
     static final Logger logger = LogManager.getLogger(EventServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+
+    @Override
+    public List<EventResponseDto> getEventsByMonthAndYear(YearMonth yearMonth) {
+        List<Event> eventList = boardRepository.findEventsForMonthAndYear(yearMonth);
+
+        return eventList.stream()
+                .map(EventResponseDto::new)
+                .toList();
+    }
 
     @Override
     public void createEvent(BoardRequestDto boardRequestDto, LocalDate date) throws IOException {
@@ -38,9 +51,7 @@ public class EventServiceImpl implements EventService {
         boardRepository.save(board);
 
         Event event = new Event(board, date);
-
         attachments.forEach(event::addAttachedFile);
-
         boardRepository.save(event);
     }
 
@@ -48,7 +59,7 @@ public class EventServiceImpl implements EventService {
     public void updateEvent(Long id, BoardRequestDto boardRequestDto, LocalDate date) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
-        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "해당 아이디가 존재하지 않습니다."));
+        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
         board.update(boardRequestDto, attachments);
 
         boardRepository.save(board);

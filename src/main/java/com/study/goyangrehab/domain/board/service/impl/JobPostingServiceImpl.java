@@ -47,7 +47,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     public void updateJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
-        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "해당 아이디가 존재하지 않습니다."));
+        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
         board.update(boardRequestDto, attachments);
 
         boardRepository.save(board);
