@@ -15,10 +15,6 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("job_posting")
 public class JobPosting extends Board {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Reply reply;
-
-
     public JobPosting(Board board) {
         super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
     }

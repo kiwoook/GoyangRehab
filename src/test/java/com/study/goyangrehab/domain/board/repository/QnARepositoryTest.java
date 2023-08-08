@@ -64,55 +64,5 @@ class QnARepositoryTest {
 
 
     }
-    @Test
-    @DisplayName("QnA&Reply findAll 테스트")
-    void queryDslTest(){
-        // given
-        Board board1 = Board.builder()
-                .title("제목1")
-                .content("내용")
-                .creator("글쓴이")
-                .build();
 
-        Board board2 = Board.builder()
-                .title("답글1")
-                .content("답글 내용")
-                .creator("답글 글쓴이")
-                .build();
-
-        Board board3 = Board.builder()
-                .title("제목2")
-                .content("내용2")
-                .creator("글쓴이2")
-                .build();
-
-        QnA qna1 = new QnA(board1);
-        QnA qna2 = new QnA(board3);
-
-        Reply reply1 = new Reply(board2);
-
-        List<Board> expectedResult = new ArrayList<>();
-
-        expectedResult.add(board1);
-        expectedResult.add(board2);
-        expectedResult.add(board3);
-
-
-        // when
-        boardRepository.save(reply1);
-
-        qna1.addReply(reply1);
-        boardRepository.save(qna1);
-        boardRepository.save(qna2);
-
-        List<QnA> results = qnaRepository.findAll();
-
-
-
-        // then
-
-        assertThat(results).isEqualTo(expectedResult);
-
-
-    }
 }

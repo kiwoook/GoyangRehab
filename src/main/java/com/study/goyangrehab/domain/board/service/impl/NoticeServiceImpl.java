@@ -8,6 +8,7 @@ import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.enums.NoticeCategory;
 import com.study.goyangrehab.service.AttachmentService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,7 +47,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void updateNotice(Long id, BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException {
+    public void updateNotice(Long id, BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException, EntityNotFoundException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
         Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));

@@ -6,7 +6,7 @@ import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.dto.EventResponseDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("/api/board/event")
 @RequiredArgsConstructor

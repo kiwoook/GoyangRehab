@@ -3,8 +3,6 @@ package com.study.goyangrehab.domain.board.entity.boards;
 import com.study.goyangrehab.domain.board.entity.Board;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +13,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("free")
 public class Free extends Board {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Reply reply;
-
-    public Free(Board board, Reply reply) {
+    public Free(Board board) {
         super(board.getTitle(), board.getContent(), board.getCreator(), board.getView(), board.getAttachedFiles());
-        this.reply = reply;
     }
 }

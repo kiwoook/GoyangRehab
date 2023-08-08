@@ -5,6 +5,7 @@ import com.study.goyangrehab.domain.board.entity.boards.QnA;
 import com.study.goyangrehab.domain.board.entity.boards.Reply;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.repository.QnARepository;
+import com.study.goyangrehab.domain.board.repository.ReplyRepository;
 import com.study.goyangrehab.domain.board.service.QnAService;
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.dto.BoardRequestDto;
@@ -32,11 +33,12 @@ public class QnAServiceImpl implements QnAService {
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
     private final QnARepository qnaRepository;
+    private final ReplyRepository replyRepository;
 
     @Override
     public List<BoardResponseDto> getQnABoardList(Integer page) {
 
-        List<Board> boardList = boardRepository.findQnAWithReply(PageRequest.of(page, 15));
+        List<Board> boardList = boardRepository.findQnAWithReply(PageRequest.of(page-1, 15));
 
         if(boardList.isEmpty()){
             logger.info("QnABoardList is NULL");
@@ -65,16 +67,15 @@ public class QnAServiceImpl implements QnAService {
     }
 
     @Override
-    public void updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException {
+    public void updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException, UnsupportedOperationException {
 
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
         QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
 
-        // 서비스에서 QnA 객체에 Reply 객체가 연결되어 있는지 확인?
-        if (qna.getReply() == null) {
-            logger.info("수정 불가능");
-            throw new NullPointerException("수정 불가능 객체 아이디 : " + qna);
+        if(replyRepository.findAllByBoardExists(id)){
+            logger.info( "수정 불가능 id : {}", id);
+            throw new UnsupportedOperationException("수정 불가능 ID : "+ id);
         }
 
         Board board = qna;
@@ -95,11 +96,9 @@ public class QnAServiceImpl implements QnAService {
 
         Reply reply = Reply.createReplyFromDto(boardRequestDto);
         attachments.forEach(reply::addAttachedFile);
+        reply.addReply(qna);
         boardRepository.save(reply);
 
-        qna.addReply(reply);
-
-        boardRepository.save(qna);
     }
 
 

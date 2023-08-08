@@ -6,16 +6,17 @@ import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("/api/board/qna")
 @RequiredArgsConstructor
@@ -26,11 +27,11 @@ public class QnAController {
     @GetMapping()
     public ResponseEntity<List<BoardResponseDto>> getAllQnAWithPage(
             @NotBlank @RequestParam("page") Integer page
-    ){
-        try{
+    ) {
+        try {
             List<BoardResponseDto> boardResponseDtos = qnaService.getQnABoardList(page);
             return ResponseEntity.ok().body(boardResponseDtos);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -60,6 +61,8 @@ public class QnAController {
             return ResponseEntity.ok().build();
         } catch (IOException e) {
             return ResponseEntity.badRequest().build();
+        } catch (UnsupportedOperationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
