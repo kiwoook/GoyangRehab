@@ -19,15 +19,17 @@ public class BoardAddForm {
     private String title;
     @NotBlank
     private String content;
+    @NotBlank
+    private String creator;
 
     private List<MultipartFile> imageFiles;
     private List<MultipartFile> generalFiles;
 
     @Builder
-    public BoardAddForm(String title, String content, List<MultipartFile> imageFiles, List<MultipartFile> generalFiles) {
+    public BoardAddForm(String title, String content, String creator, List<MultipartFile> imageFiles, List<MultipartFile> generalFiles) {
         this.title = title;
         this.content = content;
-
+        this.creator = creator;
         this.imageFiles = (imageFiles != null) ? imageFiles : new ArrayList<>();
         this.generalFiles = (generalFiles != null) ? generalFiles : new ArrayList<>();
     }
@@ -38,14 +40,19 @@ public class BoardAddForm {
         return BoardRequestDto.builder()
                 .title(title)
                 .content(content)
+                .creator(creator)
                 .attachmentFiles(attachments)
                 .build();
     }
 
     private Map<AttachmentType, List<MultipartFile>> getAttachmentTypeListMap() {
         Map<AttachmentType, List<MultipartFile>> attachments = new ConcurrentHashMap<>();
-        attachments.put(AttachmentType.IMAGE, imageFiles);
-        attachments.put(AttachmentType.GENERAL, generalFiles);
+        if (imageFiles != null) {
+            attachments.put(AttachmentType.IMAGE, imageFiles);
+        }
+        if (generalFiles != null) {
+            attachments.put(AttachmentType.GENERAL, generalFiles);
+        }
         return attachments;
     }
 }

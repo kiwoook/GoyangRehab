@@ -42,7 +42,7 @@ public class QnAServiceImpl implements QnAService {
 
         if(boardList.isEmpty()){
             logger.info("QnABoardList is NULL");
-            throw new NullPointerException("QNABoardList is NULL");
+            throw new EntityNotFoundException("QNABoardList is NULL");
         }
 
         return boardList.stream()
@@ -98,7 +98,6 @@ public class QnAServiceImpl implements QnAService {
         attachments.forEach(reply::addAttachedFile);
         reply.addReply(qna);
         boardRepository.save(reply);
-
     }
 
 

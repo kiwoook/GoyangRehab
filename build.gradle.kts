@@ -33,6 +33,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
 
     compileOnly("org.projectlombok:lombok")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")
