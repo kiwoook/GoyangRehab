@@ -8,7 +8,7 @@ import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
-import com.study.goyangrehab.service.BoardService;
+import com.study.goyangrehab.domain.board.service.BoardService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

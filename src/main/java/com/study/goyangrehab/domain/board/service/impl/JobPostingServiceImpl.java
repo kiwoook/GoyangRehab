@@ -31,7 +31,7 @@ public class JobPostingServiceImpl implements JobPostingService {
 
 
     @Override
-    public List<BoardResponseDto> getJobPostingList(Integer page) {
+    public List<BoardResponseDto> getJobPostingList(int page) {
         List<Board> boardList = boardRepository.findJobPostingWithReply(PageRequest.of(page - 1, 15));
         if (boardList.isEmpty()) {
             logger.info("JobPosting BoardList is NULL");

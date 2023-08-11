@@ -5,6 +5,8 @@ import com.study.goyangrehab.dto.BoardAddForm;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.dto.EventResponseDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
+@Tag(name = "boards", description = "게시판 API")
 @Log4j2
 @RestController
 @RequestMapping("/api/board/event")
@@ -28,6 +31,7 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<List<EventResponseDto>> getEventsByMonthAndYear(
+            @Schema(name = "년-월", example = "yyyy-MM")
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth yearMonth
     ) {
         logger.info("getEventsByMonthAndYear 실행");

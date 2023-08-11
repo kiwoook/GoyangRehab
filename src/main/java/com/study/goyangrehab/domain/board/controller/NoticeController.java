@@ -5,14 +5,18 @@ import com.study.goyangrehab.dto.BoardAddForm;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.enums.NoticeCategory;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
+@Tag(name = "boards", description = "게시판 API")
 @Slf4j
 @RestController
 @RequestMapping("/api/board/notice")
@@ -20,6 +24,18 @@ import java.io.IOException;
 public class NoticeController {
 
     private final NoticeServiceImpl noticeService;
+
+    @GetMapping
+    public ResponseEntity<List<BoardResponseDto>> getAllNoticeWithPage(
+            @NotBlank @RequestParam("page") int page
+    ){
+        try {
+            List<BoardResponseDto> boardResponseDtos = noticeService.getNoticeBoardList(page);
+            return ResponseEntity.ok().body(boardResponseDtos);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<BoardResponseDto> createNotice(

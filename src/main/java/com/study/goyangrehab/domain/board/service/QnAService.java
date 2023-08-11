@@ -1,5 +1,6 @@
 package com.study.goyangrehab.domain.board.service;
 
+import com.study.goyangrehab.domain.board.entity.boards.QnA;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
 
@@ -10,9 +11,9 @@ public interface QnAService {
 
     List<BoardResponseDto> getQnABoardList(Integer page);
 
-    void createQnA(BoardRequestDto boardRequestDto) throws IOException;
+    QnA createQnA(BoardRequestDto boardRequestDto) throws IOException;
 
-    void updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException;
+    QnA updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException;
 
     void addReplyToQnA(Long id, BoardRequestDto boardRequestDto) throws IOException;
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface JobPostingService {
 
-    List<BoardResponseDto> getJobPostingList(Integer page);
+    List<BoardResponseDto> getJobPostingList(int page);
 
     void createJobPosting(BoardRequestDto boardRequestDto) throws IOException;
 

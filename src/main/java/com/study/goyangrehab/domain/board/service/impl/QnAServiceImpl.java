@@ -38,9 +38,9 @@ public class QnAServiceImpl implements QnAService {
     @Override
     public List<BoardResponseDto> getQnABoardList(Integer page) {
 
-        List<Board> boardList = boardRepository.findQnAWithReply(PageRequest.of(page-1, 15));
+        List<Board> boardList = boardRepository.findQnAWithReply(PageRequest.of(page - 1, 15));
 
-        if(boardList.isEmpty()){
+        if (boardList.isEmpty()) {
             logger.info("QnABoardList is NULL");
             throw new EntityNotFoundException("QNABoardList is NULL");
         }
@@ -51,48 +51,43 @@ public class QnAServiceImpl implements QnAService {
     }
 
     @Override
-    public void createQnA(BoardRequestDto boardRequestDto) throws IOException {
+    public QnA createQnA(BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
         for (Attachment attachment : attachments) {
             logger.info(attachment.getOriginFilename());
         }
 
         Board board = boardRequestDto.toEntity();
-        boardRepository.save(board);
 
         QnA qna = new QnA(board);
         attachments.forEach(qna::addAttachedFile);
 
         boardRepository.save(qna);
+        return qna;
     }
 
     @Override
-    public void updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException, UnsupportedOperationException {
+    public QnA updateQnA(Long id, BoardRequestDto boardRequestDto) throws IOException, UnsupportedOperationException {
 
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
         QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
 
-        if(replyRepository.findAllByBoardExists(id)){
-            logger.info( "수정 불가능 id : {}", id);
-            throw new UnsupportedOperationException("수정 불가능 ID : "+ id);
+        if (replyRepository.existsByBoardId(id)) {
+            logger.info("수정 불가능 id : {}", id);
+            throw new UnsupportedOperationException("수정 불가능 ID : " + id);
         }
 
-        Board board = qna;
-        board.update(boardRequestDto, attachments);
+        qna.update(boardRequestDto, attachments);
 
-        boardRepository.save(board);
-
-        qna = new QnA(board);
-
-        boardRepository.save(qna);
+        return qna;
     }
 
     @Override
     public void addReplyToQnA(Long id, BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
-        QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
+            QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
 
         Reply reply = Reply.createReplyFromDto(boardRequestDto);
         attachments.forEach(reply::addAttachedFile);

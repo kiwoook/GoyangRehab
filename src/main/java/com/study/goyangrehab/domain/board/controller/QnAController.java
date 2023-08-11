@@ -4,6 +4,7 @@ import com.study.goyangrehab.domain.board.service.impl.QnAServiceImpl;
 import com.study.goyangrehab.dto.BoardAddForm;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
+@Tag(name = "boards", description = "게시판 API")
 @Log4j2
 @RestController
 @RequestMapping("/api/board/qna")

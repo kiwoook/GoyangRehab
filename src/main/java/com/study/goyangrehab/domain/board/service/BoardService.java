@@ -1,4 +1,4 @@
-package com.study.goyangrehab.service;
+package com.study.goyangrehab.domain.board.service;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Reply;
@@ -10,6 +10,8 @@ import java.util.List;
 
 
 public interface BoardService {
+
+    // TODO 게시물 검색 구현해야함
 
     BoardResponseDto getBoardById(Long id);
 
@@ -31,6 +33,5 @@ public interface BoardService {
 
     void deleteBoard(Long id);
 
-    void addReplyToBoard(Long boardId, Reply reply);
 
 }

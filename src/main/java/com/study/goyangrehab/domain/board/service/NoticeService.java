@@ -1,15 +1,20 @@
 package com.study.goyangrehab.domain.board.service;
 
+import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.enums.NoticeCategory;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface NoticeService {
 
-    void createNotice(BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException;
+    List<BoardResponseDto> getNoticeBoardList(int page);
 
-    void updateNotice(Long id, BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException;
+    Notice createNotice(BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException;
+
+    Notice updateNotice(Long id, BoardRequestDto boardRequestDto, NoticeCategory category) throws IOException;
 
 
 }
