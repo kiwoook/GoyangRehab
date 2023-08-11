@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum BoardCategory {
-    EVENT,
     FREE,
     JOB_POSTING,
     NEWS,

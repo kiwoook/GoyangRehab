@@ -1,9 +1,16 @@
 package com.study.goyangrehab.domain.board.repository.impl;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.goyangrehab.domain.board.entity.Board;
-import com.study.goyangrehab.domain.board.entity.boards.*;
+import com.study.goyangrehab.domain.board.entity.boards.Event;
+import com.study.goyangrehab.domain.board.entity.boards.Free;
+import com.study.goyangrehab.domain.board.entity.boards.News;
+import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.domain.board.repository.BoardRepositoryCustom;
+import com.study.goyangrehab.enums.BoardCategory;
+import com.study.goyangrehab.enums.SearchType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -11,14 +18,14 @@ import org.springframework.stereotype.Repository;
 import java.time.YearMonth;
 import java.util.List;
 
-import static com.study.goyangrehab.domain.board.entity.boards.QReply.reply;
 import static com.study.goyangrehab.domain.board.entity.QBoard.board;
 import static com.study.goyangrehab.domain.board.entity.boards.QEvent.event;
-import static com.study.goyangrehab.domain.board.entity.boards.QJobPosting.jobPosting;
-import static com.study.goyangrehab.domain.board.entity.boards.QQnA.qnA;
-import static com.study.goyangrehab.domain.board.entity.boards.QNotice.notice;
-import static com.study.goyangrehab.domain.board.entity.boards.QNews.news;
 import static com.study.goyangrehab.domain.board.entity.boards.QFree.free;
+import static com.study.goyangrehab.domain.board.entity.boards.QJobPosting.jobPosting;
+import static com.study.goyangrehab.domain.board.entity.boards.QNews.news;
+import static com.study.goyangrehab.domain.board.entity.boards.QNotice.notice;
+import static com.study.goyangrehab.domain.board.entity.boards.QQnA.qnA;
+import static com.study.goyangrehab.domain.board.entity.boards.QReply.reply;
 
 
 @Repository
@@ -89,4 +96,44 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
     }
+
+    @Override
+    public List<Board> searchBoardListDynamically(SearchType searchType, BoardCategory category, String query) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+
+        // TODO 유저 아이디에 대한 분기를 만들어야 함.
+        // TODO 서비스단이나 컨트롤러단에서 NULL 값이 들어오면 어떻게 처리해야할지 생각
+
+        if (searchType == SearchType.TITLE) {
+            builder.and(board.title.containsIgnoreCase(query));
+        } else if (searchType == SearchType.CONTENT) {
+            builder.and(board.content.containsIgnoreCase(query));
+        } else if (searchType == SearchType.NAME) {
+            builder.and(board.creator.eq(query));
+        } else if (searchType == SearchType.TITLE_CONTENT) {
+            builder.and(board.title.containsIgnoreCase(query)
+                    .or(board.content.containsIgnoreCase(query)));
+        }
+
+        JPQLQuery<Board> jpqlQuery = jpaQueryFactory.selectFrom(board).where(builder);
+
+
+        if (category == BoardCategory.FREE) {
+            jpqlQuery.join(free).on(free.id.eq(board.id));
+
+        } else if (category == BoardCategory.NEWS) {
+            jpqlQuery.join(news).on(news.id.eq(board.id));
+        } else if (category == BoardCategory.QNA) {
+            jpqlQuery.join(qnA).on(qnA.id.eq(board.id));
+        } else if (category == BoardCategory.JOB_POSTING) {
+            jpqlQuery.join(jobPosting).on(jobPosting.id.eq(board.id));
+        } else if (category == BoardCategory.NOTICE) {
+            jpqlQuery.join(notice).on(notice.id.eq(board.id));
+        }
+
+        return jpqlQuery.fetch();
+    }
 }
+
+
