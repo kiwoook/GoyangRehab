@@ -98,12 +98,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public List<Board> searchBoardListDynamically(SearchType searchType, BoardCategory category, String query) {
+    public List<Board> searchBoardListDynamically(Pageable pageable, SearchType searchType, BoardCategory category, String query) {
         BooleanBuilder builder = new BooleanBuilder();
 
-
         // TODO 유저 아이디에 대한 분기를 만들어야 함.
-        // TODO 서비스단이나 컨트롤러단에서 NULL 값이 들어오면 어떻게 처리해야할지 생각
 
         if (searchType == SearchType.TITLE) {
             builder.and(board.title.containsIgnoreCase(query));
@@ -116,8 +114,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                     .or(board.content.containsIgnoreCase(query)));
         }
 
-        JPQLQuery<Board> jpqlQuery = jpaQueryFactory.selectFrom(board).where(builder);
-
+        JPQLQuery<Board> jpqlQuery = jpaQueryFactory.selectFrom(board).where(builder).orderBy(board.id.desc());
 
         if (category == BoardCategory.FREE) {
             jpqlQuery.join(free).on(free.id.eq(board.id));

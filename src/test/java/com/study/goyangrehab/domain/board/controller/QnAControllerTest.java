@@ -42,6 +42,7 @@ class QnAControllerTest {
 
     @MockBean
     QnAServiceImpl qnAService;
+
     @MockBean
     JpaAuditingConfiguration jpaAuditingConfiguration;
 

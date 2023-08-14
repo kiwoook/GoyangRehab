@@ -3,8 +3,11 @@ package com.study.goyangrehab.domain.board.repository;
 import com.study.goyangrehab.config.TestConfig;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Event;
+import com.study.goyangrehab.domain.board.entity.boards.Free;
 import com.study.goyangrehab.domain.board.entity.boards.QnA;
 import com.study.goyangrehab.domain.board.entity.boards.Reply;
+import com.study.goyangrehab.enums.BoardCategory;
+import com.study.goyangrehab.enums.SearchType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayName;
@@ -134,5 +137,32 @@ class BoardRepositoryTest {
 
         assertThat(result.get(0).getTitle()).isEqualTo(board3.getTitle());
 
+    }
+
+    @Test
+    @DisplayName("Free 게시판 제목 검색 테스트")
+    void dynamicQuerySearchTest1(){
+        // given
+        boardRepository.save(new Free(new Board("제목1", "내용1", "글쓴이1", 0, null)));
+        boardRepository.save(new Free(new Board("제목2", "내용2", "글쓴이2", 0, null)));
+
+        // when
+        List<Board> boardList = boardRepository.searchBoardListDynamically(PageRequest.of(1, 15), SearchType.TITLE, BoardCategory.FREE, "제목");
+
+        // then
+        assertThat(boardList.get(0).getTitle()).isEqualTo("제목2");
+    }
+    @Test
+    @DisplayName("Free 게시판 제목 검색 실패 테스트")
+    void dynamicQuerySearchTest2(){
+        // given
+        boardRepository.save(new Free(new Board("제목1", "내용1", "글쓴이1", 0, null)));
+        boardRepository.save(new Free(new Board("제목2", "내용2", "글쓴이2", 0, null)));
+
+        // when
+        List<Board> boardList = boardRepository.searchBoardListDynamically(PageRequest.of(1, 15), SearchType.TITLE, BoardCategory.FREE, "없음");
+
+        // then
+        assertThat(boardList).isEmpty();
     }
 }

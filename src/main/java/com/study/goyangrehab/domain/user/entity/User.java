@@ -1,10 +1,8 @@
 package com.study.goyangrehab.domain.user.entity;
 
 import com.study.goyangrehab.common.BaseTimeEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,5 +15,12 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "user_id", unique = true)
+    private String userId;
+
+
+    @Builder
+    public User(String userId) {
+        this.userId = userId;
+    }
 }

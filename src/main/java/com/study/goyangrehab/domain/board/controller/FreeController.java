@@ -1,15 +1,16 @@
 package com.study.goyangrehab.domain.board.controller;
 
-import com.study.goyangrehab.domain.board.service.impl.NoticeServiceImpl;
+import com.study.goyangrehab.domain.board.service.impl.FreeServiceImpl;
+import com.study.goyangrehab.domain.board.service.impl.JobPostingServiceImpl;
 import com.study.goyangrehab.dto.BoardAddForm;
 import com.study.goyangrehab.dto.BoardRequestDto;
 import com.study.goyangrehab.dto.BoardResponseDto;
-import com.study.goyangrehab.enums.NoticeCategory;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,35 +18,35 @@ import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "boards", description = "게시판 API")
-@Slf4j
+@Log4j2
 @RestController
-@RequestMapping("/api/board/notice")
+@RequestMapping("/api/board/free")
 @RequiredArgsConstructor
-public class NoticeController {
+public class FreeController {
 
-    private final NoticeServiceImpl noticeService;
+    static final Logger logger = LogManager.getLogger(FreeController.class);
+    private final FreeServiceImpl freeService;
 
-    @GetMapping
-    public ResponseEntity<List<BoardResponseDto>> getAllNoticeWithPage(
+    @GetMapping()
+    public ResponseEntity<List<BoardResponseDto>> getAllFreeBoardWithPage(
             @NotBlank @RequestParam("page") int page
-    ){
+    ) {
         try {
-            List<BoardResponseDto> boardResponseDtos = noticeService.getNoticeBoardList(page);
+            List<BoardResponseDto> boardResponseDtos = freeService.getFreeBoardList(page);
             return ResponseEntity.ok().body(boardResponseDtos);
-        } catch (EntityNotFoundException e) {
+        } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping
-    public ResponseEntity<BoardResponseDto> createNotice(
-            @ModelAttribute BoardAddForm boardAddForm,
-            @RequestBody NoticeCategory category
+
+    @PostMapping()
+    public ResponseEntity<BoardResponseDto> createFree(
+            @ModelAttribute BoardAddForm boardAddForm
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
-
         try {
-            noticeService.createNotice(boardRequestDto, category);
+            freeService.createFree(boardRequestDto);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
             return ResponseEntity.badRequest().build();
@@ -53,19 +54,17 @@ public class NoticeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> updateNotice(
+    public ResponseEntity<BoardResponseDto> updateFree(
             @PathVariable Long id,
-            @ModelAttribute BoardAddForm boardAddForm,
-            @RequestBody NoticeCategory category
+            @ModelAttribute BoardAddForm boardAddForm
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
         try {
-            noticeService.updateNotice(id, boardRequestDto, category);
+            freeService.updateFree(id, boardRequestDto);
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException | IOException e) {
+        } catch (IOException e) {
             return ResponseEntity.badRequest().build();
         }
-
-
     }
+
 }

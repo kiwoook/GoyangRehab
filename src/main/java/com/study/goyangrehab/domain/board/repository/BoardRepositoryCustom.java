@@ -1,10 +1,12 @@
 package com.study.goyangrehab.domain.board.repository;
 
 import com.study.goyangrehab.domain.board.entity.Board;
-import com.study.goyangrehab.domain.board.entity.boards.*;
+import com.study.goyangrehab.domain.board.entity.boards.Event;
+import com.study.goyangrehab.domain.board.entity.boards.Free;
+import com.study.goyangrehab.domain.board.entity.boards.News;
+import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.enums.BoardCategory;
 import com.study.goyangrehab.enums.SearchType;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.YearMonth;
@@ -24,5 +26,6 @@ public interface BoardRepositoryCustom {
 
     List<Free> findFree(Pageable pageable);
 
-    List<Board> searchBoardListDynamically(SearchType searchType, BoardCategory category, String query);
+
+    List<Board> searchBoardListDynamically(Pageable pageable, SearchType searchType, BoardCategory category, String query);
 }
