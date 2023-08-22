@@ -1,4 +1,4 @@
-package com.study.goyangrehab.dto;
+package com.study.goyangrehab.domain.board.dto;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.file.entity.Attachment;

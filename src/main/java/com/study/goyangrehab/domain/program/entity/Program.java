@@ -4,10 +4,8 @@ import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.domain.user.entity.UserProgram;
 import com.study.goyangrehab.enums.ProgramStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,10 +17,12 @@ import java.util.Set;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "program")
+@SuperBuilder
 public class Program {
 
     @Id
@@ -41,14 +41,15 @@ public class Program {
     @Column(name = "registration_end_time")
     private LocalDateTime registrationEndTime;
 
+
     @Enumerated(EnumType.STRING)
-    private ProgramStatus status = ProgramStatus.PENDING;
+    private ProgramStatus status;
 
     @Column(name = "recruitment_capacity")
-    private int recruitmentCapacity;
+    private Integer recruitmentCapacity;
 
     @Column(name = "current_attendees")
-    private int currentAttendees = 0;
+    private Integer currentAttendees;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -56,7 +57,8 @@ public class Program {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "party")
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "program")
     private Set<UserProgram> users = new HashSet<>();
 
     @Builder

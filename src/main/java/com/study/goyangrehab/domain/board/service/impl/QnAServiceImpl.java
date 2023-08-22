@@ -7,9 +7,10 @@ import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.repository.QnARepository;
 import com.study.goyangrehab.domain.board.repository.ReplyRepository;
 import com.study.goyangrehab.domain.board.service.QnAService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,11 @@ public class QnAServiceImpl implements QnAService {
         return boardList.stream()
                 .map(BoardResponseDto::new)
                 .toList();
+    }
+
+    @Override
+    public int getLastPageOfQnA() {
+        return Util.getLastPage(qnaRepository.count());
     }
 
     @Override

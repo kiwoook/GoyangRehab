@@ -1,4 +1,4 @@
-package com.study.goyangrehab.dto;
+package com.study.goyangrehab.domain.user.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

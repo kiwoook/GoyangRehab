@@ -1,9 +1,11 @@
 package com.study.goyangrehab.domain.board.controller;
 
+import com.study.goyangrehab.common.dto.PageResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardWithPageResponseDto;
 import com.study.goyangrehab.domain.board.service.impl.NewsServiceImpl;
-import com.study.goyangrehab.dto.BoardAddForm;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardAddForm;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
@@ -28,12 +30,13 @@ public class NewsController {
     private final NewsServiceImpl newsService;
 
     @GetMapping()
-    public ResponseEntity<List<BoardResponseDto>> getAllNewsWithPage(
+    public ResponseEntity<BoardWithPageResponseDto> getAllNewsWithPage(
             @NotBlank @RequestParam("page") int page
     ) {
         try {
             List<BoardResponseDto> boardResponseDtos = newsService.getNewsBoardList(page);
-            return ResponseEntity.ok().body(boardResponseDtos);
+            PageResponseDto pageResponseDto = new PageResponseDto(newsService.getLastPageOfNews());
+            return ResponseEntity.ok().body(new BoardWithPageResponseDto(boardResponseDtos, pageResponseDto));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

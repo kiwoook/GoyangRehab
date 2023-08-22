@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,10 +31,11 @@ public class User extends BaseTimeEntity {
         this.userId = userId;
     }
 
-    public void addProgram(UserProgram userProgram){
+    public void addProgram(UserProgram userProgram) {
         this.programs.add(userProgram);
     }
-    public void leaveProgram(UserProgram userProgram){
+
+    public void leaveProgram(UserProgram userProgram) {
         this.programs.remove(userProgram);
     }
 }

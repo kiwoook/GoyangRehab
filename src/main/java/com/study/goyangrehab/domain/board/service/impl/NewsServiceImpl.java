@@ -3,10 +3,13 @@ package com.study.goyangrehab.domain.board.service.impl;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.News;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
+import com.study.goyangrehab.domain.board.repository.NewsRepository;
+import com.study.goyangrehab.domain.board.repository.NoticeRepository;
 import com.study.goyangrehab.domain.board.service.NewsService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ public class NewsServiceImpl implements NewsService {
     static final Logger logger = LogManager.getLogger(NewsServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+    private final NewsRepository newsRepository;
 
     @Override
     public List<BoardResponseDto> getNewsBoardList(int page) {
@@ -42,6 +46,11 @@ public class NewsServiceImpl implements NewsService {
         return newsList.stream()
                 .map(BoardResponseDto::new)
                 .toList();
+    }
+
+    @Override
+    public int getLastPageOfNews() {
+        return Util.getLastPage(newsRepository.count());
     }
 
     @Override

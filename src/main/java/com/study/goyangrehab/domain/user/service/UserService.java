@@ -1,8 +1,8 @@
 package com.study.goyangrehab.domain.user.service;
 
 import com.study.goyangrehab.domain.user.entity.User;
-import com.study.goyangrehab.dto.UserCreateRequestDto;
-import com.study.goyangrehab.dto.UserUpdateRequestDto;
+import com.study.goyangrehab.domain.user.dto.UserCreateRequestDto;
+import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
 import com.study.goyangrehab.enums.Authority;
 
 public interface UserService {

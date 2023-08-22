@@ -1,10 +1,10 @@
 package com.study.goyangrehab.domain.board.controller;
 
 import com.study.goyangrehab.domain.board.service.impl.EventServiceImpl;
-import com.study.goyangrehab.dto.BoardAddForm;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
-import com.study.goyangrehab.dto.EventResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardAddForm;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.EventResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

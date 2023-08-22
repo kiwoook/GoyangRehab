@@ -18,11 +18,11 @@ public class UserProgram {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name="user_id")
+    @JoinColumn(name="user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "program_id")
+    @JoinColumn(name = "program_id")
     private Program program;
 
     @Builder

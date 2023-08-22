@@ -3,10 +3,12 @@ package com.study.goyangrehab.domain.board.service.impl;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.JobPosting;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
+import com.study.goyangrehab.domain.board.repository.JobPostingRepository;
 import com.study.goyangrehab.domain.board.service.JobPostingService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     static final Logger logger = LogManager.getLogger(JobPostingServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+    private final JobPostingRepository jobPostingRepository;
 
 
     @Override
@@ -74,6 +77,11 @@ public class JobPostingServiceImpl implements JobPostingService {
 
         boardRepository.save(jobPosting);
 
+    }
+
+    @Override
+    public int getLastPageOfJobPosting() {
+        return Util.getLastPage(jobPostingRepository.count());
     }
 
     @Override

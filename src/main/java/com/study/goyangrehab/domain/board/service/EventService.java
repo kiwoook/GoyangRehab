@@ -1,7 +1,7 @@
 package com.study.goyangrehab.domain.board.service;
 
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.EventResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.EventResponseDto;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -13,6 +13,8 @@ public interface EventService {
     List<EventResponseDto> getEventsByMonthAndYear(YearMonth yearMonth);
 
     void createEvent(BoardRequestDto boardRequestDto, LocalDate date) throws IOException;
+
+    int getLastPageOfEvent();
 
     void updateEvent(Long id, BoardRequestDto boardRequestDto, LocalDate date) throws IOException;
 }

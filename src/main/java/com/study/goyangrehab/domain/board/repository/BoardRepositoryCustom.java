@@ -26,6 +26,5 @@ public interface BoardRepositoryCustom {
 
     List<Free> findFree(Pageable pageable);
 
-
     List<Board> searchBoardListDynamically(Pageable pageable, SearchType searchType, BoardCategory category, String query);
 }

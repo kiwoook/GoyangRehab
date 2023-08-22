@@ -3,19 +3,22 @@ package com.study.goyangrehab.domain.board.service.impl;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.service.BoardService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.FileStore;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.enums.BoardCategory;
 import com.study.goyangrehab.enums.SearchType;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.util.List;
 
 @Log4j2
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
@@ -37,6 +41,19 @@ public class BoardServiceImpl implements BoardService {
 
         return new BoardResponseDto(board);
     }
+
+    @Override
+    public void increaseViewCount(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시글을 찾을 수 없습니다."));
+        board.increaseView();
+        boardRepository.save(board);
+    }
+
+    @Override
+    public int getLastPageOfBoard() {
+        return Util.getLastPage(boardRepository.count());
+    }
+
 
     @Override
     public List<BoardResponseDto> getAllBoards() {

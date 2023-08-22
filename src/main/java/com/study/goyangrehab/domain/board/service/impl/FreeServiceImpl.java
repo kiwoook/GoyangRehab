@@ -1,13 +1,15 @@
 package com.study.goyangrehab.domain.board.service.impl;
 
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Free;
 import com.study.goyangrehab.domain.board.entity.boards.Reply;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
+import com.study.goyangrehab.domain.board.repository.FreeRepository;
 import com.study.goyangrehab.domain.board.service.FreeService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class FreeServiceImpl implements FreeService {
     static final Logger logger = LogManager.getLogger(FreeServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+    private final FreeRepository freeRepository;
 
     @Override
     public List<BoardResponseDto> getFreeBoardList(int page) {
@@ -65,6 +68,11 @@ public class FreeServiceImpl implements FreeService {
         board.update(boardRequestDto, attachments);
 
         return boardRepository.save(new Free(board));
+    }
+
+    @Override
+    public int getLastPageOfFree() {
+        return Util.getLastPage(freeRepository.count());
     }
 
     @Override

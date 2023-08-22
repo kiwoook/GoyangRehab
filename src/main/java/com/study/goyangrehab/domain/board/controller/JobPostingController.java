@@ -1,9 +1,11 @@
 package com.study.goyangrehab.domain.board.controller;
 
+import com.study.goyangrehab.common.dto.PageResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardWithPageResponseDto;
 import com.study.goyangrehab.domain.board.service.impl.JobPostingServiceImpl;
-import com.study.goyangrehab.dto.BoardAddForm;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardAddForm;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +28,13 @@ public class JobPostingController {
     private final JobPostingServiceImpl jobPostingService;
 
     @GetMapping()
-    public ResponseEntity<List<BoardResponseDto>> getAllJobPostingWithPage(
+    public ResponseEntity<BoardWithPageResponseDto> getAllJobPostingWithPage(
             @NotBlank @RequestParam("page") Integer page
     ) {
         try {
             List<BoardResponseDto> boardResponseDtos = jobPostingService.getJobPostingList(page);
-            return ResponseEntity.ok().body(boardResponseDtos);
+            PageResponseDto pageResponseDto = new PageResponseDto(jobPostingService.getLastPageOfJobPosting());
+            return ResponseEntity.ok().body(new BoardWithPageResponseDto(boardResponseDtos, pageResponseDto));
         } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }

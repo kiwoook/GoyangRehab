@@ -3,10 +3,12 @@ package com.study.goyangrehab.domain.board.service.impl;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Event;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
+import com.study.goyangrehab.domain.board.repository.EventRepository;
 import com.study.goyangrehab.domain.board.service.EventService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.EventResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.EventResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Transactional
@@ -30,6 +31,7 @@ public class EventServiceImpl implements EventService {
     static final Logger logger = LogManager.getLogger(EventServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public List<EventResponseDto> getEventsByMonthAndYear(YearMonth yearMonth) {
@@ -53,6 +55,11 @@ public class EventServiceImpl implements EventService {
         Event event = new Event(board, date);
         attachments.forEach(event::addAttachedFile);
         boardRepository.save(event);
+    }
+
+    @Override
+    public int getLastPageOfEvent() {
+        return Util.getLastPage(eventRepository.count());
     }
 
     @Override

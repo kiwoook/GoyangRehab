@@ -1,13 +1,14 @@
 package com.study.goyangrehab.domain.board.service.impl;
 
 import com.study.goyangrehab.domain.board.entity.Board;
-import com.study.goyangrehab.domain.board.entity.boards.News;
 import com.study.goyangrehab.domain.board.entity.boards.Notice;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
+import com.study.goyangrehab.domain.board.repository.NoticeRepository;
 import com.study.goyangrehab.domain.board.service.NoticeService;
+import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.enums.NoticeCategory;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,6 +32,7 @@ public class NoticeServiceImpl implements NoticeService {
     static final Logger logger = LogManager.getLogger(NoticeServiceImpl.class);
     private final AttachmentService attachmentService;
     private final BoardRepository boardRepository;
+    private final NoticeRepository noticeRepository;
 
 
     @Override
@@ -45,6 +47,11 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeList.stream()
                 .map(BoardResponseDto::new)
                 .toList();
+    }
+
+    @Override
+    public int getLastPageOfNotice() {
+        return Util.getLastPage(noticeRepository.count());
     }
 
     @Override

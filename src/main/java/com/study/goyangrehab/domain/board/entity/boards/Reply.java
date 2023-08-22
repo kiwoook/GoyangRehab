@@ -1,7 +1,7 @@
 package com.study.goyangrehab.domain.board.entity.boards;
 
 import com.study.goyangrehab.domain.board.entity.Board;
-import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,11 @@
 package com.study.goyangrehab.domain.board.controller;
 
+import com.study.goyangrehab.common.dto.PageResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardWithPageResponseDto;
 import com.study.goyangrehab.domain.board.service.impl.FreeServiceImpl;
-import com.study.goyangrehab.domain.board.service.impl.JobPostingServiceImpl;
-import com.study.goyangrehab.dto.BoardAddForm;
-import com.study.goyangrehab.dto.BoardRequestDto;
-import com.study.goyangrehab.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.dto.BoardAddForm;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,13 @@ public class FreeController {
     private final FreeServiceImpl freeService;
 
     @GetMapping()
-    public ResponseEntity<List<BoardResponseDto>> getAllFreeBoardWithPage(
+    public ResponseEntity<BoardWithPageResponseDto> getAllFreeBoardWithPage(
             @NotBlank @RequestParam("page") int page
     ) {
         try {
             List<BoardResponseDto> boardResponseDtos = freeService.getFreeBoardList(page);
-            return ResponseEntity.ok().body(boardResponseDtos);
+            PageResponseDto pageResponseDto = new PageResponseDto(freeService.getLastPageOfFree());
+            return ResponseEntity.ok().body(new BoardWithPageResponseDto(boardResponseDtos, pageResponseDto));
         } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }

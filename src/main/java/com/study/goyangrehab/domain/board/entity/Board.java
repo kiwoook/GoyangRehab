@@ -2,7 +2,7 @@ package com.study.goyangrehab.domain.board.entity;
 
 import com.study.goyangrehab.common.BaseTimeEntity;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "category")
 public class Board extends BaseTimeEntity {
 
@@ -37,6 +37,7 @@ public class Board extends BaseTimeEntity {
     private String creator;
 
     @ColumnDefault("0")
+    @Column(nullable = false)
     private Integer view;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -60,6 +61,10 @@ public class Board extends BaseTimeEntity {
         this.content = boardRequestDto.getContent();
         this.creator = boardRequestDto.getCreator();
         this.attachedFiles = attachments;
+    }
+
+    public void increaseView(){
+        this.view = this.getView() + 1;
     }
 
 }
