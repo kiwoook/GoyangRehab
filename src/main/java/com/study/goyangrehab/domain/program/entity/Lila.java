@@ -1,18 +1,22 @@
 package com.study.goyangrehab.domain.program.entity;
 
-import com.study.goyangrehab.domain.program.entity.Program;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
 @Table(name = "Lila_academy")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
-@AllArgsConstructor
 public class Lila extends Program {
+    private String place;
+    private int price;
 
-
+    @Column(name = "application_target")
+    private String applicationTarget;
 }

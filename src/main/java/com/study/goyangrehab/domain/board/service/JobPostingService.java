@@ -17,4 +17,5 @@ public interface JobPostingService {
     int getLastPageOfJobPosting();
 
     void addReplyToJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException;
+
 }

@@ -101,8 +101,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     public List<Board> searchBoardListDynamically(Pageable pageable, SearchType searchType, BoardCategory category, String query) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        // TODO 유저 아이디에 대한 분기를 만들어야 함.
-
         if (searchType == SearchType.TITLE) {
             builder.and(board.title.containsIgnoreCase(query));
         } else if (searchType == SearchType.CONTENT) {

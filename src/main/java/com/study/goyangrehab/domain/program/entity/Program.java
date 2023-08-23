@@ -4,8 +4,12 @@ import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.domain.user.entity.UserProgram;
 import com.study.goyangrehab.enums.ProgramStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -35,21 +39,28 @@ public class Program {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @Column(name = "registration_start_time")
-    private LocalDateTime registrationStartTime;
+    @Column(name = "register_start_time")
+    private LocalDateTime registerStartTime;
 
-    @Column(name = "registration_end_time")
-    private LocalDateTime registrationEndTime;
-
+    @Column(name = "register_end_time")
+    private LocalDateTime registerEndTime;
 
     @Enumerated(EnumType.STRING)
     private ProgramStatus status;
 
+    @ColumnDefault("0")
     @Column(name = "recruitment_capacity")
-    private Integer recruitmentCapacity;
+    private int recruitmentCapacity;
 
+    @ColumnDefault("0")
     @Column(name = "current_attendees")
-    private Integer currentAttendees;
+    private int currentAttendees;
+
+    @Column(name = "document_deadline")
+    private LocalDateTime docDeadLine;
+
+    @Column(name = "payment_deadline")
+    private LocalDateTime paymentDeadLine;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -57,49 +68,58 @@ public class Program {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String text;
+
+    private int price;
+
+
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "program")
     private Set<UserProgram> users = new HashSet<>();
 
     @Builder
-    public Program(String name, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime registrationStartTime, LocalDateTime registrationEndTime, ProgramStatus status, int recruitmentCapacity) {
+    public Program(String name, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime registerStartTime, LocalDateTime registerEndTime, int recruitmentCapacity, LocalDateTime docDeadLine, LocalDateTime paymentDeadLine, String text, int price) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.registrationStartTime = registrationStartTime;
-        this.registrationEndTime = registrationEndTime;
-        this.status = status;
+        this.registerStartTime = registerStartTime;
+        this.registerEndTime = registerEndTime;
         this.recruitmentCapacity = recruitmentCapacity;
+        this.docDeadLine = docDeadLine;
+        this.paymentDeadLine = paymentDeadLine;
+        this.text = text;
+        this.price = price;
     }
 
     @PrePersist
-    public void updateStatusBasedOnTime(){
-        if (isBeforeStart()){
+    public void updateStatusBasedOnTime() {
+        if (isBeforeStart()) {
             this.status = ProgramStatus.PENDING;
-        }else if(isAfterEnd()){
+        } else if (isAfterEnd()) {
             this.status = ProgramStatus.CLOSED;
-        }else{
+        } else {
             this.status = ProgramStatus.OPEN;
         }
     }
 
-    public void updateStatus(ProgramStatus status){
+    public void updateStatus(ProgramStatus status) {
         this.status = status;
     }
 
-    public void addUser(UserProgram userProgram){
-        if (isOngoing() && isNotFull() && isUserAlreadyJoin(userProgram.getUser())){
+    public void addUser(UserProgram userProgram) {
+        if (isOngoing() && isNotFull() && isUserAlreadyJoin(userProgram.getUser())) {
             this.users.add(userProgram);
         }
     }
 
-    public void removeUser(UserProgram userProgram){
+    public void removeUser(UserProgram userProgram) {
         this.users.remove(userProgram);
     }
 
-    private boolean isUserAlreadyJoin(User user){
-        for (UserProgram userProgram : users){
-            if(userProgram.getUser().getUserId().equals(user.getUserId())){
+    private boolean isUserAlreadyJoin(User user) {
+        for (UserProgram userProgram : users) {
+            if (userProgram.getUser().getUserId().equals(user.getUserId())) {
                 return true;
             }
         }
@@ -111,15 +131,22 @@ public class Program {
     }
 
     private boolean isBeforeStart() {
-        return LocalDate.now().atStartOfDay().isBefore(registrationStartTime);
+        return LocalDate.now().atStartOfDay().isBefore(this.registerStartTime);
     }
 
     private boolean isAfterEnd() {
-        return LocalDate.now().atStartOfDay().isBefore(registrationEndTime);
+        return LocalDate.now().atStartOfDay().isBefore(this.registerEndTime);
     }
 
     private boolean isOngoing() {
         return !isBeforeStart() && !isAfterEnd();
     }
 
+    @Override
+    public String toString() {
+        return "Program{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

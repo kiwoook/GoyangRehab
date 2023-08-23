@@ -1,6 +1,5 @@
 package com.study.goyangrehab.domain.program.entity;
 
-import com.study.goyangrehab.domain.program.entity.Program;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;

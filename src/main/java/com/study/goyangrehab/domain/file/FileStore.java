@@ -29,7 +29,7 @@ public class FileStore {
         return attachments;
     }
 
-    public Attachment storeFile(MultipartFile multipartFile, AttachmentType attachmentType) throws IOException, IOException {
+    public Attachment storeFile(MultipartFile multipartFile, AttachmentType attachmentType) throws IOException {
         if (multipartFile.isEmpty()) {
             return null;
         }
@@ -48,7 +48,7 @@ public class FileStore {
 
     public String createPath(String storeFilename, AttachmentType attachmentType) {
         String viaPath = (attachmentType == AttachmentType.IMAGE) ? "images/" : "generals/";
-        return fileDirPath+viaPath+storeFilename;
+        return fileDirPath + viaPath + storeFilename;
     }
 
     private String createStoreFilename(String originalFilename) {

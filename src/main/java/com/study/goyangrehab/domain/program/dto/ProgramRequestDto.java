@@ -31,6 +31,15 @@ public class ProgramRequestDto {
     @NotBlank
     private Integer recruitmentCapacity;
 
+    private LocalDateTime docDeadLine;
+
+    private LocalDateTime paymentDeadLine;
+
+    private int price;
+
+    private String text;
+
+
     @Builder
     public ProgramRequestDto(String name, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime registrationStartTime, LocalDateTime registrationEndTime, Integer recruitmentCapacity) {
         this.name = name;
@@ -41,7 +50,7 @@ public class ProgramRequestDto {
         this.recruitmentCapacity = recruitmentCapacity;
     }
 
-    public Program toEntity(ProgramRequestDto programRequestDto){
+    public Program toEntity(ProgramRequestDto programRequestDto) {
         return Program.builder()
                 .name(programRequestDto.getName())
                 .startTime(programRequestDto.getStartTime())
@@ -49,6 +58,10 @@ public class ProgramRequestDto {
                 .recruitmentCapacity(programRequestDto.getRecruitmentCapacity())
                 .registrationStartTime(programRequestDto.getRegistrationStartTime())
                 .registrationEndTime(programRequestDto.getRegistrationEndTime())
+                .docDeadLine(programRequestDto.getDocDeadLine())
+                .paymentDeadLine(programRequestDto.getPaymentDeadLine())
+                .text(programRequestDto.getText())
+                .price(programRequestDto.getPrice())
                 .build();
     }
 }

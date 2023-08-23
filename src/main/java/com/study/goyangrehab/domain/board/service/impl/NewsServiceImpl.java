@@ -1,15 +1,14 @@
 package com.study.goyangrehab.domain.board.service.impl;
 
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.News;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.repository.NewsRepository;
-import com.study.goyangrehab.domain.board.repository.NoticeRepository;
 import com.study.goyangrehab.domain.board.service.NewsService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
-import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

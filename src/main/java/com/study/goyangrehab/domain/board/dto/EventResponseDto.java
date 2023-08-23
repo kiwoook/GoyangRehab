@@ -1,6 +1,5 @@
 package com.study.goyangrehab.domain.board.dto;
 
-import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.domain.board.entity.boards.Event;
 import lombok.AccessLevel;
 import lombok.Builder;

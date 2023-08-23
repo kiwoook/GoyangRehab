@@ -2,6 +2,8 @@ package com.study.goyangrehab.domain.board.service.impl;
 
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.JobPosting;
+import com.study.goyangrehab.domain.board.entity.boards.QnA;
+import com.study.goyangrehab.domain.board.entity.boards.Reply;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
 import com.study.goyangrehab.domain.board.repository.JobPostingRepository;
 import com.study.goyangrehab.domain.board.service.JobPostingService;
@@ -86,7 +88,14 @@ public class JobPostingServiceImpl implements JobPostingService {
 
     @Override
     public void addReplyToJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException {
+        List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
+        JobPosting jobPosting = jobPostingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
+
+        Reply reply = Reply.createReplyFromDto(boardRequestDto);
+        attachments.forEach(reply::addAttachedFile);
+        reply.addReply(jobPosting);
+        boardRepository.save(reply);
     }
 
 

@@ -1,17 +1,27 @@
 package com.study.goyangrehab.domain.program.entity;
 
-import com.study.goyangrehab.domain.program.entity.Program;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @Entity
 @Table(name = "nuri_class")
 @SuperBuilder
-@AllArgsConstructor
+@NoArgsConstructor
 public class NuriClass extends Program {
+    private int price;
+
+    @Column(name="disabled_user_num")
+    private int disabledNum;
+
+    @Column(name="Non_disabled_user_num")
+    private int nonDisabledNum;
+
+    @Column(name="application_target")
+    private String applicationTarget;
 
 }

@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-public class GoyangehabApplication {
+public class GoyangRehabApplication {
     public static void main(String[] args) {
-        SpringApplication.run(GoyangehabApplication.class, args);
+        SpringApplication.run(GoyangRehabApplication.class, args);
     }
 
 }
