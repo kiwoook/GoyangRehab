@@ -2,16 +2,15 @@ package com.study.goyangrehab.domain.board.controller;
 
 import com.study.goyangrehab.domain.board.dto.BoardAddForm;
 import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
+import com.study.goyangrehab.domain.board.service.impl.BoardServiceImpl;
 import com.study.goyangrehab.enums.BoardCategory;
 import com.study.goyangrehab.enums.SearchType;
-import com.study.goyangrehab.domain.board.service.impl.BoardServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,9 @@ import java.util.List;
 public class BoardController {
 
     static final Logger logger = LogManager.getLogger(BoardController.class);
+    private static final String VIEW_COOKIE = "goyang_rehab_viewed_";
     private final BoardServiceImpl boardService;
-    private static final String VIEW_COOKIE= "goyang_rehab_viewed_";
+
     @PostMapping
     public ResponseEntity<BoardResponseDto> createBoard(@ModelAttribute BoardAddForm boardAddForm) {
         return null;
@@ -46,10 +46,10 @@ public class BoardController {
         Cookie[] cookies = request.getCookies();
         boolean isViewed = false;
 
-        if (cookies != null){
+        if (cookies != null) {
             logger.info("쿠키 탐색 시작");
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(VIEW_COOKIE+id)){
+                if (cookie.getName().equals(VIEW_COOKIE + id)) {
                     isViewed = true;
                     break;
                 }
@@ -57,10 +57,10 @@ public class BoardController {
         }
 
         try {
-            if (!isViewed){
+            if (!isViewed) {
                 logger.info("쿠키 생성");
                 boardService.increaseViewCount(id);
-                Cookie cookie = new Cookie(VIEW_COOKIE+id, "true");
+                Cookie cookie = new Cookie(VIEW_COOKIE + id, "true");
                 cookie.setMaxAge(60 * 60);
                 response.addCookie(cookie);
             }

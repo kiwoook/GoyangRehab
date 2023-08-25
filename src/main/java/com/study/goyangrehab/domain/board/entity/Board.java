@@ -38,13 +38,13 @@ public class Board extends BaseTimeEntity {
 
     @ColumnDefault("0")
     @Column(nullable = false)
-    private Integer view;
+    private int view;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attachment> attachedFiles = new ArrayList<>();
 
     @Builder
-    public Board(String title, String content, String creator, Integer view, List<Attachment> attachedFiles) {
+    public Board(String title, String content, String creator, int view, List<Attachment> attachedFiles) {
         this.title = title;
         this.content = content;
         this.creator = creator;

@@ -35,7 +35,7 @@ public class PendingServiceImpl implements PendingService {
         if(userPrograms.isEmpty()){
             throw new EntityNotFoundException(USER_TABLE_NOT_FOUND);
         }
-        return userPrograms.stream().map(UserProgram::getUser).toList().stream().map(UserResponseDto::new).toList();
+        return userPrograms.stream().map(UserProgram::getUser).map(UserResponseDto::new).toList();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PendingServiceImpl implements PendingService {
         if(userPrograms.isEmpty()){
             throw new EntityNotFoundException(USER_TABLE_NOT_FOUND);
         }
-        return userPrograms.stream().map(UserProgram::getUser).toList().stream().map(UserResponseDto::new).toList();
+        return userPrograms.stream().map(UserProgram::getUser).map(UserResponseDto::new).toList();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PendingServiceImpl implements PendingService {
         if(userPrograms.isEmpty()){
             throw new EntityNotFoundException(USER_TABLE_NOT_FOUND);
         }
-        return userPrograms.stream().map(UserProgram::getUser).toList().stream().map(UserResponseDto::new).toList();
+        return userPrograms.stream().map(UserProgram::getUser).map(UserResponseDto::new).toList();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class PendingServiceImpl implements PendingService {
         if(userPrograms.isEmpty()){
             throw new EntityNotFoundException(USER_TABLE_NOT_FOUND);
         }
-        return userPrograms.stream().map(UserProgram::getUser).toList().stream().map(UserResponseDto::new).toList();
+        return userPrograms.stream().map(UserProgram::getUser).map(UserResponseDto::new).toList();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PendingServiceImpl implements PendingService {
         if(userPrograms.isEmpty()){
             throw new EntityNotFoundException(USER_TABLE_NOT_FOUND);
         }
-        return userPrograms.stream().map(UserProgram::getUser).toList().stream().map(UserResponseDto::new).toList();
+        return userPrograms.stream().map(UserProgram::getUser).map(UserResponseDto::new).toList();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class PendingServiceImpl implements PendingService {
         if(userPrograms.isEmpty()){
             throw new EntityNotFoundException(USER_TABLE_NOT_FOUND);
         }
-        return userPrograms.stream().map(UserProgram::getUser).toList().stream().map(UserResponseDto::new).toList();
+        return userPrograms.stream().map(UserProgram::getUser).map(UserResponseDto::new).toList();
     }
 
     @Override

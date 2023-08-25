@@ -1,5 +1,6 @@
 package com.study.goyangrehab.domain.program.entity;
 
+import com.study.goyangrehab.domain.program.dto.ProgramRequestDto;
 import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.domain.user.entity.UserProgram;
 import com.study.goyangrehab.enums.ProgramStatus;
@@ -25,7 +26,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "program")
+@DiscriminatorColumn(name = "program_category")
 @SuperBuilder
 public class Program {
 
@@ -73,23 +74,20 @@ public class Program {
 
     private int price;
 
-
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "program")
     private Set<UserProgram> users = new HashSet<>();
 
-    @Builder
-    public Program(String name, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime registerStartTime, LocalDateTime registerEndTime, int recruitmentCapacity, LocalDateTime docDeadLine, LocalDateTime paymentDeadLine, String text, int price) {
-        this.name = name;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.registerStartTime = registerStartTime;
-        this.registerEndTime = registerEndTime;
-        this.recruitmentCapacity = recruitmentCapacity;
-        this.docDeadLine = docDeadLine;
-        this.paymentDeadLine = paymentDeadLine;
-        this.text = text;
-        this.price = price;
+
+    public void update(ProgramRequestDto programRequestDto) {
+        this.name = programRequestDto.getName();
+        this.startTime = programRequestDto.getStartTime();
+        this.endTime = programRequestDto.getEndTime();
+        this.registerStartTime = programRequestDto.getStartTime();
+        this.registerEndTime = programRequestDto.getEndTime();
+        this.docDeadLine = programRequestDto.getDocDeadLine();
+        this.paymentDeadLine = programRequestDto.getPaymentDeadLine();
+        this.text = programRequestDto.getText();
     }
 
     @PrePersist
@@ -108,8 +106,12 @@ public class Program {
     }
 
     public void addUser(UserProgram userProgram) {
-        if (isOngoing() && isNotFull() && isUserAlreadyJoin(userProgram.getUser())) {
+        if (isOngoing() && isNotFull() && !isUserAlreadyJoin(userProgram.getUser())) {
             this.users.add(userProgram);
+        } else if (!isNotFull() || isAfterEnd()) {
+            this.status = ProgramStatus.CLOSED;
+        } else if (isBeforeStart()) {
+            this.status = ProgramStatus.OPEN;
         }
     }
 

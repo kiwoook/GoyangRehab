@@ -54,17 +54,6 @@ public class ProgramServiceImpl implements ProgramService {
         return new ProgramResponseDto(program);
     }
 
-    // TODO 이거 프로그램별로 다 만들어야함 ㅋㅋ
-//    @Override
-//    public UserResponseDto applyUserToProgram(Long programId, String userId) {
-//        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다. userId : " + userId));
-//        Program program = programRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException("프로그램이 존재하지 않습니다. programId : " + programId));
-//
-//        UserProgram userProgram = new UserProgram(user, program);
-//        userProgramRepository.save(userProgram);
-//
-//        return new UserResponseDto(user);
-//    }
 
     @Override
     public UserResponseDto removeUserFromProgram(Long programId, String userId) {

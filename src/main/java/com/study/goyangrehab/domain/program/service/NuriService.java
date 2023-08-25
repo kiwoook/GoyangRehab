@@ -1,0 +1,18 @@
+package com.study.goyangrehab.domain.program.service;
+
+import com.study.goyangrehab.domain.program.dto.ProgramRequestDto;
+import com.study.goyangrehab.domain.program.dto.ProgramResponseDto;
+import com.study.goyangrehab.enums.ProgramStatus;
+
+import java.util.List;
+
+public interface NuriService {
+    List<ProgramResponseDto> getAllInRange();
+
+    List<ProgramResponseDto> getAllByStatus(ProgramStatus status);
+
+
+    ProgramResponseDto createProgram(ProgramRequestDto programRequestDto);
+
+    ProgramResponseDto updateProgram(Long programId, ProgramRequestDto programRequestDto);
+}

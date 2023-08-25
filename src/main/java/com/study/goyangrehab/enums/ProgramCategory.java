@@ -6,10 +6,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ProgramCategory {
-    ARTE,
-    DIGITAL_EDUCATION,
-    DIGITAL_EXPERIENCE,
-    LILA,
-    NURI_CLASS,
-    SUPPORTER_EDUCATION
+    ARTE("arte"),
+    DIGITAL_EDUCATION("digital_education"),
+    DIGITAL_EXPERIENCE("digital_experience"),
+    LILA("lila_academy"),
+    NURI_CLASS("nuri_class"),
+    SUPPORTER_EDUCATION("supporter_education");
+
+    private final String tableName;
 }
