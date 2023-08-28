@@ -23,6 +23,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id", unique = true, length = 50)
     private String userId;
 
+    // TODO 유저 권한 구현
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<UserProgram> programs = new HashSet<>();
 

@@ -49,6 +49,12 @@ public class NuriServiceImpl implements NuriService {
     }
 
     @Override
+    public ProgramResponseDto getProgram(Long programId) {
+        return new ProgramResponseDto(nuriRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException("Program not found id : " + programId)));
+
+    }
+
+    @Override
     public ProgramResponseDto createProgram(ProgramRequestDto programRequestDto) {
         int disabledNum = programRequestDto.getDisabledNum();
         int nonDisabledNum = programRequestDto.getNonDisabledNum();

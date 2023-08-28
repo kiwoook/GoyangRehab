@@ -47,6 +47,12 @@ public class SupporterEducationServiceImpl implements SupporterEducationService 
     }
 
     @Override
+    public ProgramResponseDto getProgram(Long programId) {
+        return new ProgramResponseDto(supporterEducationRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException("Program not found id : " + programId)));
+
+    }
+
+    @Override
     public ProgramResponseDto createProgram(ProgramRequestDto programRequestDto) {
         String courseCategory = programRequestDto.getCourseCategory();
         Program program = ProgramRequestDto.toEntity(programRequestDto);

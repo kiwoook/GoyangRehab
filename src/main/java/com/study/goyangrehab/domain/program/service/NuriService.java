@@ -11,7 +11,7 @@ public interface NuriService {
 
     List<ProgramResponseDto> getAllByStatus(ProgramStatus status);
 
-
+    ProgramResponseDto getProgram(Long programId);
     ProgramResponseDto createProgram(ProgramRequestDto programRequestDto);
 
     ProgramResponseDto updateProgram(Long programId, ProgramRequestDto programRequestDto);

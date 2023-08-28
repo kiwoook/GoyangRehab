@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProgramResponseDto {
 
+    private Long id;
+
     private String name;
 
     private LocalDateTime startTime;
@@ -34,6 +36,7 @@ public class ProgramResponseDto {
     private String text;
 
     public ProgramResponseDto(Program program){
+        this.id = program.getId();
         this.name = program.getName();
         this.startTime = program.getStartTime();
         this.endTime = program.getEndTime();

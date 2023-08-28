@@ -8,9 +8,11 @@ import java.util.List;
 
 public interface ArteService {
 
+
     List<ProgramResponseDto> getAllInRange();
 
     List<ProgramResponseDto> getAllByStatus(ProgramStatus status);
+    ProgramResponseDto getProgram(Long programId);
 
     ProgramResponseDto createProgram(ProgramRequestDto programRequestDto);
 

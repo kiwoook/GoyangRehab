@@ -11,6 +11,7 @@ public interface LilaService {
 
     List<ProgramResponseDto> getAllByStatus(ProgramStatus status);
 
+    ProgramResponseDto getProgram(Long programId);
 
     ProgramResponseDto createProgram(ProgramRequestDto programRequestDto);
 
