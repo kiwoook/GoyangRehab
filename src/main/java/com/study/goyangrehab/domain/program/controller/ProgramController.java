@@ -24,7 +24,6 @@ import java.util.List;
 @RequestMapping("/api/program")
 @RequiredArgsConstructor
 public class ProgramController {
-    // TODO 컨트롤러 구현
     static final Logger logger = LogManager.getLogger(ProgramController.class);
     private final ProgramService programService;
 

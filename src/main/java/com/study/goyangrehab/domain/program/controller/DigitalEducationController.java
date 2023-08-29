@@ -42,9 +42,9 @@ public class DigitalEducationController {
     }
 
     @Operation(summary = "디지털 조회 by status", description = "status 파라미터에 따라 ProgramResponseDto List 반환")
-    @GetMapping
+    @GetMapping("/{status}")
     public ResponseEntity<List<ProgramResponseDto>> getDigitalEducationByStatus(
-            @RequestParam ProgramStatus status
+            @PathVariable ProgramStatus status
     ) {
         try {
             List<ProgramResponseDto> programResponseDtos = digitalEducationService.getAllByStatus(status);

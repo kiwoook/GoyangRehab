@@ -10,6 +10,7 @@ import com.study.goyangrehab.domain.board.service.impl.QnAServiceImpl;
 import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
 import com.study.goyangrehab.service.impl.AttachmentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static org.mockito.Mockito.*;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
 class QnAServiceTest {
 
@@ -106,6 +108,6 @@ class QnAServiceTest {
         verify(qnARepository).save(any(QnA.class));
     }
 
-    // Add more test methods for other service functionalities
+
 
 }

@@ -48,6 +48,12 @@ public class LilaServiceImpl implements LilaService {
     }
 
     @Override
+    public ProgramResponseDto getProgram(Long programId) {
+        return new ProgramResponseDto(lilaRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException("Program not found id : " + programId)));
+
+    }
+
+    @Override
     public ProgramResponseDto createProgram(ProgramRequestDto programRequestDto) {
         String place = programRequestDto.getPlace();
         Program program = ProgramRequestDto.toEntity(programRequestDto);

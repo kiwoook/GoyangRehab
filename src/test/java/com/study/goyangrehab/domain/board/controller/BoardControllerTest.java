@@ -73,6 +73,7 @@ class BoardControllerTest {
 
         // when
         mockMvc.perform(get("/api/board/search")
+                        .param("page", String.valueOf(1))
                         .param("category", String.valueOf(category))
                         .param("type", String.valueOf(type))
                         .param("query", query))
@@ -88,6 +89,7 @@ class BoardControllerTest {
 
         // when
         mockMvc.perform(get("/api/board/search")
+                        .param("page", String.valueOf(1))
                         .param("category", String.valueOf(category))
                         .param("type", String.valueOf(type))
                         .param("query", query))
@@ -103,6 +105,7 @@ class BoardControllerTest {
 
         // when
         mockMvc.perform(get("/api/board/search")
+                        .param("page", String.valueOf(1))
                         .param("category", String.valueOf(category))
                         .param("type", String.valueOf(type))
                         .param("query", query))

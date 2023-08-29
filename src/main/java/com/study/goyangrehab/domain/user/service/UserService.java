@@ -1,26 +1,22 @@
 package com.study.goyangrehab.domain.user.service;
 
-import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.domain.user.dto.UserCreateRequestDto;
 import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
-import com.study.goyangrehab.enums.Authority;
+import com.study.goyangrehab.domain.user.entity.User;
 
 public interface UserService {
-    User createUser(UserCreateRequestDto userDto);
+    User create(UserCreateRequestDto userDto);
 
-    User getUserById(String userId);
-    User getUserByUsername(String username);
-    User getUserByEmail(String email);
+    User update(String userId, UserUpdateRequestDto userDto);
 
-    User updateUser(Long userId, UserUpdateRequestDto userDto);
-
-    User deleteUser(String userId);
-
-    User grantAuthority(String userId, Authority authority);
+    User delete(String userId);
 
     User authenticate(String username, String password);
 
-    boolean isUsernameAvailable(String username);
+    boolean isUserIdAvailable(String userId);
+
+    boolean isNicknameAvailable(String nickname);
+
     boolean isEmailAvailable(String email);
 
 }

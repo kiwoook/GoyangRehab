@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
-
+    // TODO 업데이트와 삭제는 해당 유저와 어드민만 가능하도록 해야함.
 
 }

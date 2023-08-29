@@ -35,7 +35,7 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation("com.google.code.gson:gson:2.10.1")
-
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client:3.1.2")
 
     compileOnly("org.projectlombok:lombok:1.18.28")
 
@@ -46,7 +46,6 @@ dependencies {
     annotationProcessor ("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
-
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")

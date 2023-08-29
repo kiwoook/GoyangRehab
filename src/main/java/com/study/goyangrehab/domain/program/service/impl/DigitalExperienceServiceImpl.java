@@ -44,6 +44,12 @@ public class DigitalExperienceServiceImpl implements DigitalEducationService {
     }
 
     @Override
+    public ProgramResponseDto getProgram(Long programId) {
+        return new ProgramResponseDto(digitalExperienceRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException("Program not found id : " + programId)));
+
+    }
+
+    @Override
     public ProgramResponseDto createProgram(ProgramRequestDto programRequestDto) {
         Program program = ProgramRequestDto.toEntity(programRequestDto);
 

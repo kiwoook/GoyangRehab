@@ -42,9 +42,9 @@ public class LilaController {
     }
 
     @Operation(summary = "status별 조회", description = "status 파라미터에 따라 ProgramResponseDto List 반환")
-    @GetMapping
+    @GetMapping("/{status}")
     public ResponseEntity<List<ProgramResponseDto>> getLilaByStatus(
-            @RequestParam ProgramStatus status
+            @PathVariable ProgramStatus status
     ) {
         try {
             List<ProgramResponseDto> programResponseDtos = lilaService.getAllByStatus(status);
