@@ -8,7 +8,7 @@ import com.study.goyangrehab.domain.board.repository.QnARepository;
 import com.study.goyangrehab.domain.board.repository.ReplyRepository;
 import com.study.goyangrehab.domain.board.service.impl.QnAServiceImpl;
 import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
-import com.study.goyangrehab.service.impl.AttachmentServiceImpl;
+import com.study.goyangrehab.domain.file.service.AttachmentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;

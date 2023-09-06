@@ -1,4 +1,4 @@
-package com.study.goyangrehab.service;
+package com.study.goyangrehab.domain.file.service;
 
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.enums.AttachmentType;

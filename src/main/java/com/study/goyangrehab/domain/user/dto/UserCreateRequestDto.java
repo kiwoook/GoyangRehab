@@ -30,8 +30,8 @@ public class UserCreateRequestDto {
     @Builder
     public UserCreateRequestDto(String userId, String password, String confirmPassword, String fullName, String nickname, String birthDate, String gender, String phoneNumber, String email, String address, String benefitType, boolean disability, boolean familyRegistration, boolean emailNotification, boolean smsNotification, PasswordEncoder passwordEncoder) {
         this.userId = userId;
-        this.password = passwordEncoder.encode(password);
-        this.confirmPassword = passwordEncoder.encode(confirmPassword);
+        this.password = password;
+        this.confirmPassword = confirmPassword;
         this.fullName = fullName;
         this.nickname = nickname;
         this.birthDate = birthDate;
@@ -46,15 +46,14 @@ public class UserCreateRequestDto {
         this.smsNotification = smsNotification;
     }
 
-    public static User toEntity(UserCreateRequestDto requestDto){
-        return User.builder()
-                .userId(requestDto.getUserId())
-                .password(requestDto.password)
-                .userRole(UserAuthority.ROLE_USER)
+    public static User toEntity(UserCreateRequestDto requestDto, PasswordEncoder passwordEncoder) {
+        return User.builder().userId(requestDto.getUserId())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
+                .userRole(UserAuthority.USER)
                 .build();
     }
 
-    public boolean isPasswordConfirmed(){
+    public boolean isPasswordConfirmed() {
         return password.equals(confirmPassword);
     }
 }

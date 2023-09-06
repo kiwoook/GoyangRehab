@@ -3,6 +3,7 @@ package com.study.goyangrehab.domain.board.entity;
 import com.study.goyangrehab.common.BaseTimeEntity;
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -33,6 +34,7 @@ public class Board extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+
     @Column(nullable = false)
     private String creator;
 
@@ -59,7 +61,6 @@ public class Board extends BaseTimeEntity {
     public void update(BoardRequestDto boardRequestDto, List<Attachment> attachments) {
         this.title = boardRequestDto.getTitle();
         this.content = boardRequestDto.getContent();
-        this.creator = boardRequestDto.getCreator();
         this.attachedFiles = attachments;
     }
 

@@ -9,7 +9,8 @@ import com.study.goyangrehab.domain.board.repository.NewsRepository;
 import com.study.goyangrehab.domain.board.service.NewsService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.service.AttachmentService;
+import com.study.goyangrehab.domain.file.service.AttachmentService;
+import com.study.goyangrehab.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,13 +26,15 @@ import java.util.List;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class NewsServiceImpl implements NewsService {
 
     static final Logger logger = LogManager.getLogger(NewsServiceImpl.class);
     private final AttachmentService attachmentService;
+    private final BoardServiceImpl boardService;
     private final BoardRepository boardRepository;
     private final NewsRepository newsRepository;
+    private final UserRepository userRepository;
+
 
     @Override
     public List<BoardResponseDto> getNewsBoardList(int page) {
@@ -47,6 +50,7 @@ public class NewsServiceImpl implements NewsService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public int getLastPageOfNews() {
         return Util.getLastPage(newsRepository.count());
@@ -55,22 +59,17 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public News createNews(BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-        for (Attachment attachment : attachments) {
-            logger.info(attachment.getOriginFilename());
-        }
+        Board board = boardService.createBoard(attachments, boardRequestDto);
 
-        Board board = boardRequestDto.toEntity();
         attachments.forEach(board::addAttachedFile);
 
         return boardRepository.save(new News(board));
     }
 
+    @Transactional
     @Override
     public News updateNews(Long id, BoardRequestDto boardRequestDto) throws IOException {
-        List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-
-        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
-        board.update(boardRequestDto, attachments);
+        Board board = boardService.update(id, boardRequestDto);
 
         return boardRepository.save(new News(board));
     }

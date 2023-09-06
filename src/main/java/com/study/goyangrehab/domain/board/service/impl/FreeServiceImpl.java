@@ -10,7 +10,8 @@ import com.study.goyangrehab.domain.board.repository.FreeRepository;
 import com.study.goyangrehab.domain.board.service.FreeService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.service.AttachmentService;
+import com.study.goyangrehab.domain.file.service.AttachmentService;
+import com.study.goyangrehab.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,12 +27,15 @@ import java.util.List;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-@Transactional
+
 public class FreeServiceImpl implements FreeService {
     static final Logger logger = LogManager.getLogger(FreeServiceImpl.class);
     private final AttachmentService attachmentService;
+    private final BoardServiceImpl boardService;
     private final BoardRepository boardRepository;
     private final FreeRepository freeRepository;
+    private final UserRepository userRepository;
+
 
     @Override
     public List<BoardResponseDto> getFreeBoardList(int page) {
@@ -47,25 +51,21 @@ public class FreeServiceImpl implements FreeService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public Free createFree(BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-        for (Attachment attachment : attachments) {
-            logger.info(attachment.getOriginFilename());
-        }
+        Board board = boardService.createBoard(attachments, boardRequestDto);
 
-        Board board = boardRequestDto.toEntity();
         attachments.forEach(board::addAttachedFile);
 
         return boardRepository.save(new Free(board));
     }
 
+    @Transactional
     @Override
     public Free updateFree(Long id, BoardRequestDto boardRequestDto) throws IOException {
-        List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-
-        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
-        board.update(boardRequestDto, attachments);
+        Board board = boardService.update(id, boardRequestDto);
 
         return boardRepository.save(new Free(board));
     }
@@ -75,6 +75,7 @@ public class FreeServiceImpl implements FreeService {
         return Util.getLastPage(freeRepository.count());
     }
 
+    @Transactional
     @Override
     public Board addReplyToFree(Long id, BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());

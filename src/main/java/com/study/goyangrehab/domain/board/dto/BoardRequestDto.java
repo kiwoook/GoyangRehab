@@ -1,6 +1,7 @@
 package com.study.goyangrehab.domain.board.dto;
 
 import com.study.goyangrehab.domain.board.entity.Board;
+import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.enums.AttachmentType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -21,24 +22,20 @@ public class BoardRequestDto {
     @NotBlank
     private String content;
 
-    @NotBlank
-    private String creator;
-
     private Map<AttachmentType, List<MultipartFile>> attachmentFiles = new ConcurrentHashMap<>();
 
     @Builder
-    public BoardRequestDto(String title, String content, String creator, Map<AttachmentType, List<MultipartFile>> attachmentFiles) {
+    public BoardRequestDto(String title, String content, Map<AttachmentType, List<MultipartFile>> attachmentFiles) {
         this.title = title;
         this.content = content;
-        this.creator = creator;
         this.attachmentFiles = attachmentFiles;
     }
 
-    public Board toEntity(){
+    public Board toEntity(String userId){
         return Board.builder()
                 .title(title)
                 .content(content)
-                .creator(creator)
+                .creator(userId)
                 .attachedFiles(new ArrayList<>())
                 .build();
     }

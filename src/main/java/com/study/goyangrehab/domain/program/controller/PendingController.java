@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -84,6 +85,9 @@ public class PendingController {
         }
     }
 
+    // TODO 유저 자신이 해당 프로그램을 취소함.
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/accept")
     public ResponseEntity<UserResponseDto> acceptUser(
             @RequestParam Long programId,
@@ -97,6 +101,7 @@ public class PendingController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/deny")
     public ResponseEntity<UserResponseDto> denyUser(
             @RequestParam Long programId,

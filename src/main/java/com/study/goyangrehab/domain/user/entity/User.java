@@ -1,7 +1,9 @@
 package com.study.goyangrehab.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.study.goyangrehab.common.BaseTimeEntity;
+import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
 import com.study.goyangrehab.enums.UserAuthority;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -23,8 +25,6 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity implements UserDetails {
 
-    private static final String ROLE_PREFIX = "ROLE_";
-
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +33,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "user_id", unique = true, length = 50)
     private String userId;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +50,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.userRole = userRole;
     }
 
+    public void update(UserUpdateRequestDto requestDto) {
+        this.password = requestDto.getPassword();
+    }
+
 
     public void addProgram(UserProgram userProgram) {
         this.programs.add(userProgram);
@@ -60,7 +65,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(ROLE_PREFIX+userRole.toString()));
+        return List.of(new SimpleGrantedAuthority(userRole.toString()));
     }
 
     @Override

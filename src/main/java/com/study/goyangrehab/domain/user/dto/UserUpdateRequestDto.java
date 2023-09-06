@@ -38,6 +38,11 @@ public class UserUpdateRequestDto {
         this.emailNotification = emailNotification;
         this.smsNotification = smsNotification;
     }
+
+    public boolean isPasswordConfirmed(){
+        return password.equals(confirmPassword);
+    }
+
 }
 
 

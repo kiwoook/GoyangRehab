@@ -1,25 +1,41 @@
 package com.study.goyangrehab.config;
 
+import com.study.goyangrehab.domain.auth.filter.JwtFilter;
+import com.study.goyangrehab.domain.auth.token.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+
+
+    private final TokenProvider tokenProvider;
     private static final String[] WHITE_LIST = {
             "/api/**", "/error",
             "/favicon.ico",
-            "/swagger-ui.html",
-            "/swagger/**",
+            "/v2/api-docs",
+            "/v3/api-docs/**",
+            "/configuration/ui",
             "/swagger-resources/**",
-            "/swagger/index.html"
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/file/**",
+            "/image/**",
+            "/swagger/**",
+            "/swagger-ui/**",
     };
 
     @Bean
@@ -30,8 +46,9 @@ public class SecurityConfiguration {
                 .logout(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults());
-
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -9,12 +9,16 @@ import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
 import com.study.goyangrehab.domain.board.dto.EventResponseDto;
-import com.study.goyangrehab.service.AttachmentService;
+import com.study.goyangrehab.domain.file.service.AttachmentService;
+import com.study.goyangrehab.domain.user.entity.User;
+import com.study.goyangrehab.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +28,15 @@ import java.time.YearMonth;
 import java.util.List;
 
 @Log4j2
-@Transactional
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     static final Logger logger = LogManager.getLogger(EventServiceImpl.class);
     private final AttachmentService attachmentService;
+    private final BoardServiceImpl boardService;
     private final BoardRepository boardRepository;
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<EventResponseDto> getEventsByMonthAndYear(YearMonth yearMonth) {
@@ -41,16 +46,11 @@ public class EventServiceImpl implements EventService {
                 .map(EventResponseDto::new)
                 .toList();
     }
-
+    @Transactional
     @Override
-    public void createEvent(BoardRequestDto boardRequestDto, LocalDate date) throws IOException {
+    public void createEvent(BoardRequestDto boardRequestDto, LocalDate date) throws IOException, UsernameNotFoundException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-        for (Attachment attachment : attachments) {
-            logger.info(attachment.getOriginFilename());
-        }
-
-        Board board = boardRequestDto.toEntity();
-        boardRepository.save(board);
+        Board board = boardService.createBoard(attachments, boardRequestDto);
 
         Event event = new Event(board, date);
         attachments.forEach(event::addAttachedFile);
@@ -62,15 +62,10 @@ public class EventServiceImpl implements EventService {
         return Util.getLastPage(eventRepository.count());
     }
 
+    @Transactional
     @Override
     public void updateEvent(Long id, BoardRequestDto boardRequestDto, LocalDate date) throws IOException {
-        List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-
-        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
-        board.update(boardRequestDto, attachments);
-
-        boardRepository.save(board);
-
+        Board board = boardService.update(id, boardRequestDto);
         Event event = new Event(board, date);
 
         boardRepository.save(event);

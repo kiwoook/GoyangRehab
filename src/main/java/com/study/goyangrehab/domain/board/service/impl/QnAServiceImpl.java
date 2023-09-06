@@ -1,5 +1,7 @@
 package com.study.goyangrehab.domain.board.service.impl;
 
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.QnA;
 import com.study.goyangrehab.domain.board.entity.boards.Reply;
@@ -9,9 +11,7 @@ import com.study.goyangrehab.domain.board.repository.ReplyRepository;
 import com.study.goyangrehab.domain.board.service.QnAService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
-import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
-import com.study.goyangrehab.service.AttachmentService;
+import com.study.goyangrehab.domain.file.service.AttachmentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +32,7 @@ public class QnAServiceImpl implements QnAService {
 
     static final Logger logger = LogManager.getLogger(QnAServiceImpl.class);
     private final AttachmentService attachmentService;
+    private final BoardServiceImpl boardService;
     private final BoardRepository boardRepository;
     private final QnARepository qnaRepository;
     private final ReplyRepository replyRepository;
@@ -59,17 +60,12 @@ public class QnAServiceImpl implements QnAService {
     @Override
     public QnA createQnA(BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-        for (Attachment attachment : attachments) {
-            logger.info(attachment.getOriginFilename());
-        }
-
-        Board board = boardRequestDto.toEntity();
+        Board board = boardService.createBoard(attachments, boardRequestDto);
 
         QnA qna = new QnA(board);
         attachments.forEach(qna::addAttachedFile);
 
-        boardRepository.save(qna);
-        return qna;
+        return boardRepository.save(qna);
     }
 
     @Override
@@ -86,14 +82,14 @@ public class QnAServiceImpl implements QnAService {
 
         qna.update(boardRequestDto, attachments);
 
-        return qna;
+        return qnaRepository.save(qna);
     }
 
     @Override
     public void addReplyToQnA(Long id, BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
-            QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
+        QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
 
         Reply reply = Reply.createReplyFromDto(boardRequestDto);
         attachments.forEach(reply::addAttachedFile);

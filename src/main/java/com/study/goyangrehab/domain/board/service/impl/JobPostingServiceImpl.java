@@ -10,7 +10,8 @@ import com.study.goyangrehab.domain.board.repository.JobPostingRepository;
 import com.study.goyangrehab.domain.board.service.JobPostingService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.service.AttachmentService;
+import com.study.goyangrehab.domain.file.service.AttachmentService;
+import com.study.goyangrehab.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,15 +25,15 @@ import java.io.IOException;
 import java.util.List;
 
 @Log4j2
-@Transactional
 @Service
 @RequiredArgsConstructor
 public class JobPostingServiceImpl implements JobPostingService {
     static final Logger logger = LogManager.getLogger(JobPostingServiceImpl.class);
     private final AttachmentService attachmentService;
+    private final BoardServiceImpl boardService;
     private final BoardRepository boardRepository;
     private final JobPostingRepository jobPostingRepository;
-
+    private final UserRepository userRepository;
 
     @Override
     public List<BoardResponseDto> getJobPostingList(int page) {
@@ -47,37 +48,24 @@ public class JobPostingServiceImpl implements JobPostingService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public void createJobPosting(BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-        for (Attachment attachment : attachments) {
-            logger.info(attachment.getOriginFilename());
-        }
-
-        Board board = boardRequestDto.toEntity();
-        boardRepository.save(board);
-
+        Board board = boardService.createBoard(attachments, boardRequestDto);
         JobPosting jobPosting = new JobPosting(board);
 
         attachments.forEach(jobPosting::addAttachedFile);
-
         boardRepository.save(jobPosting);
     }
 
+    @Transactional
     @Override
     public void updateJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException, EntityNotFoundException {
-        List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-
-        Board board = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "해당 아이디가 존재하지 않습니다."));
-        board.update(boardRequestDto, attachments);
-
-        boardRepository.save(board);
-
+        Board board = boardService.update(id, boardRequestDto);
         JobPosting jobPosting = new JobPosting(board);
 
-
         boardRepository.save(jobPosting);
-
     }
 
     @Override
@@ -85,10 +73,10 @@ public class JobPostingServiceImpl implements JobPostingService {
         return Util.getLastPage(jobPostingRepository.count());
     }
 
+    @Transactional
     @Override
     public void addReplyToJobPosting(Long id, BoardRequestDto boardRequestDto) throws IOException {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
-
         JobPosting jobPosting = jobPostingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
 
         Reply reply = Reply.createReplyFromDto(boardRequestDto);
