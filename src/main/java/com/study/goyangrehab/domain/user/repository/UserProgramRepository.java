@@ -13,4 +13,6 @@ public interface UserProgramRepository extends JpaRepository<UserProgram, Long>,
     Optional<UserProgram> findByUserAndProgram(User user, Program program);
 
     Optional<List<UserProgram>> findAllByProgram(Program program);
+
+    Optional<List<UserProgram>> findAllByUser(User user);
 }

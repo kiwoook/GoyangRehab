@@ -2,6 +2,7 @@ package com.study.goyangrehab.domain.program.controller;
 
 import com.study.goyangrehab.domain.program.service.impl.PendingServiceImpl;
 import com.study.goyangrehab.domain.user.dto.UserResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -85,7 +87,20 @@ public class PendingController {
         }
     }
 
-    // TODO 유저 자신이 해당 프로그램을 취소함.
+    // TODO 유저의 프로그램 신청 내역 확인
+    @Operation(summary = "프로그램 취소", description = "해당 유저나 어드민이 대기 중인 프로그램 취소")
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<UserResponseDto> cancelProgram(@PathVariable Long programId) {
+        try {
+            UserResponseDto userResponseDto = pendingService.cancelProgram(programId);
+            return ResponseEntity.ok(userResponseDto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/accept")

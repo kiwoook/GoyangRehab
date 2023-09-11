@@ -106,7 +106,7 @@ public class TokenProvider {
     }
 
     // 토큰의 유효성 검증을 수행
-    public boolean validateAccessToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -121,6 +121,8 @@ public class TokenProvider {
         }
         return false;
     }
+
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

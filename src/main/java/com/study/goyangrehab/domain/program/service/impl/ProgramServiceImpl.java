@@ -10,12 +10,15 @@ import com.study.goyangrehab.domain.user.entity.UserProgram;
 import com.study.goyangrehab.domain.user.repository.UserProgramRepository;
 import com.study.goyangrehab.domain.user.repository.UserRepository;
 import com.study.goyangrehab.enums.PendingStatus;
+import com.study.goyangrehab.enums.ProgramCategory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,7 +51,23 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
-    public ProgramResponseDto deleteProgram(Long programId) {
+    public UserResponseDto apply(Long programId, ProgramCategory category) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + userId));
+        Program program = programRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException(PROGRAM_NOT_FOUND + programId));
+
+        UserProgram userProgram = UserProgram.builder()
+                .user(user)
+                .program(program)
+                .category(category)
+                .build();
+
+        userProgramRepository.save(userProgram);
+        return new UserResponseDto(user);
+    }
+
+    @Override
+    public ProgramResponseDto delete(Long programId) {
         Program program = programRepository.findById(programId).orElseThrow(() -> new EntityNotFoundException(PROGRAM_NOT_FOUND + programId));
         programRepository.delete(program);
         return new ProgramResponseDto(program);

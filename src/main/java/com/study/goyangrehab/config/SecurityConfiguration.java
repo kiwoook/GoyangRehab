@@ -2,6 +2,7 @@ package com.study.goyangrehab.config;
 
 import com.study.goyangrehab.domain.auth.filter.JwtFilter;
 import com.study.goyangrehab.domain.auth.token.TokenProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
 
-    private final TokenProvider tokenProvider;
     private static final String[] WHITE_LIST = {
             "/api/**", "/error",
             "/favicon.ico",
@@ -37,17 +37,26 @@ public class SecurityConfiguration {
             "/swagger/**",
             "/swagger-ui/**",
     };
+    private final TokenProvider tokenProvider;
 
     @Bean
     protected SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(WHITE_LIST).permitAll())
+                        .requestMatchers(WHITE_LIST).permitAll())
                 .formLogin(login -> login.defaultSuccessUrl("/").permitAll())
                 .logout(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(except -> except
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            // 권한 오류 처리 로직을 작성합니다.
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+                        }))
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

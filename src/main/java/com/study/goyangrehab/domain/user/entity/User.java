@@ -36,10 +36,13 @@ public class User extends BaseTimeEntity implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private UserAuthority userRole;
+    @Column(name = "name", unique = true, length = 25)
+    private String name;
 
-    // TODO 유저 권한 구현
+    @ElementCollection(targetClass = UserAuthority.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<UserAuthority> roles = new HashSet<>();
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<UserProgram> programs = new HashSet<>();
 
@@ -47,7 +50,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     public User(String userId, String password, UserAuthority userRole) {
         this.userId = userId;
         this.password = password;
-        this.userRole = userRole;
+        this.roles.add(userRole);
     }
 
     public void update(UserUpdateRequestDto requestDto) {
@@ -65,7 +68,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRole.toString()));
+        return List.of(new SimpleGrantedAuthority(roles.toArray()[0].toString()));
     }
 
     @Override

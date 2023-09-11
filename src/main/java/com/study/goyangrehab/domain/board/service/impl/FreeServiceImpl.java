@@ -18,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,6 @@ public class FreeServiceImpl implements FreeService {
     private final BoardServiceImpl boardService;
     private final BoardRepository boardRepository;
     private final FreeRepository freeRepository;
-    private final UserRepository userRepository;
 
 
     @Override
@@ -81,8 +81,9 @@ public class FreeServiceImpl implements FreeService {
         List<Attachment> attachments = attachmentService.saveAttachments(boardRequestDto.getAttachmentFiles());
 
         Board free = boardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        Reply reply = Reply.createReplyFromDto(boardRequestDto);
+        Reply reply = Reply.createReplyFromDto(boardRequestDto, userId);
         attachments.forEach(reply::addAttachedFile);
         reply.addReply(free);
         return boardRepository.save(reply);

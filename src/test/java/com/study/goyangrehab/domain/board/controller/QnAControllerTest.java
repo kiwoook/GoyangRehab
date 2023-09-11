@@ -69,7 +69,6 @@ class QnAControllerTest {
         BoardAddForm boardAddForm = BoardAddForm.builder()
                 .title("제목")
                 .content("내용")
-                .creator("글쓴이")
                 .generalFiles(null)
                 .imageFiles(null)
                 .build();
@@ -100,7 +99,6 @@ class QnAControllerTest {
         BoardAddForm boardAddForm = BoardAddForm.builder()
                 .title("수정 제목")
                 .content("수정 내용")
-                .creator("수정 글쓴이")
                 .generalFiles(null)
                 .imageFiles(null)
                 .build();

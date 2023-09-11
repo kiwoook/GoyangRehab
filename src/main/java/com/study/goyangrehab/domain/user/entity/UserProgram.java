@@ -42,9 +42,6 @@ public class UserProgram {
     @Column(name = "register_end_time")
     private LocalDateTime registerEndTime;
 
-
-
-
     @Builder
     public UserProgram(User user, Program program, ProgramCategory category) {
         this.user = user;

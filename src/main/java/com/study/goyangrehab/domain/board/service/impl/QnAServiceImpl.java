@@ -18,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,7 +92,8 @@ public class QnAServiceImpl implements QnAService {
 
         QnA qna = qnaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("해당 ID가 존재하지 않습니다. ID : " + id));
 
-        Reply reply = Reply.createReplyFromDto(boardRequestDto);
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Reply reply = Reply.createReplyFromDto(boardRequestDto, userId);
         attachments.forEach(reply::addAttachedFile);
         reply.addReply(qna);
         boardRepository.save(reply);

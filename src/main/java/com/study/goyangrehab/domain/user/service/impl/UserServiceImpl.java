@@ -1,13 +1,14 @@
 package com.study.goyangrehab.domain.user.service.impl;
 
 import com.study.goyangrehab.domain.user.dto.UserCreateRequestDto;
+import com.study.goyangrehab.domain.user.dto.UserResponseDto;
 import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
 import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.domain.user.repository.UserRepository;
 import com.study.goyangrehab.domain.user.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,50 +29,54 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public User create(UserCreateRequestDto requestDto) {
+    public UserResponseDto create(UserCreateRequestDto requestDto) {
         // 중복검사 구현
         Optional<User> existUser = userRepository.findUserByUserId(requestDto.getUserId());
         if (existUser.isPresent()) {
             throw new IllegalArgumentException("user_id is Already");
         }
         User user = UserCreateRequestDto.toEntity(requestDto, passwordEncoder);
-        return userRepository.save(user);
+        return new UserResponseDto(userRepository.save(user));
     }
 
     @Override
     @Transactional
-    public User update(String userId, UserUpdateRequestDto requestDto) throws EntityNotFoundException {
-        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new EntityNotFoundException(USER_FIND_ERROR + userId));
+    public UserResponseDto update(String userId, UserUpdateRequestDto requestDto) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new UsernameNotFoundException(USER_FIND_ERROR + userId));
         user.update(requestDto);
-        return userRepository.save(user);
+        return new UserResponseDto(userRepository.save(user));
     }
 
     @Override
     @Transactional
-    public User delete(String userId) throws EntityNotFoundException {
-        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new EntityNotFoundException(USER_FIND_ERROR + userId));
+    public UserResponseDto delete(String userId) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUserId(userId).orElseThrow(() -> new UsernameNotFoundException(USER_FIND_ERROR + userId));
         userRepository.delete(user);
-        return userRepository.save(user);
+        return new UserResponseDto(userRepository.save(user));
     }
 
-    @Override
-    public User authenticate(String username, String password) {
-        return null;
-    }
 
     @Override
     public boolean isUserIdAvailable(String userId) {
-        return false;
+        Optional<User> user = userRepository.findUserByUserId(userId);
+
+        return user.isEmpty();
     }
 
     @Override
     public boolean isNicknameAvailable(String nickname) {
-        return false;
+        return !(userRepository.existsByName(nickname));
     }
 
     @Override
     public boolean isEmailAvailable(String email) {
         return false;
+    }
+
+    @Override
+    public boolean isOwner(Authentication authentication, String id) {
+        String userId = authentication.getName();
+        return userId.equals(id);
     }
 
     @Override

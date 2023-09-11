@@ -24,7 +24,7 @@ public class Reply extends Board {
         this.board = board;
     }
 
-    public static Reply createReplyFromDto(BoardRequestDto boardRequestDto) {
-        return new Reply(boardRequestDto.toEntity());
+    public static Reply createReplyFromDto(BoardRequestDto boardRequestDto, String userId) {
+        return new Reply(boardRequestDto.toEntity(userId));
     }
 }
