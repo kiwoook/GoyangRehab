@@ -1,6 +1,7 @@
 package com.study.goyangrehab.domain.user.controller;
 
 import com.study.goyangrehab.domain.program.dto.ProgramResponseDto;
+import com.study.goyangrehab.domain.program.service.impl.PendingServiceImpl;
 import com.study.goyangrehab.domain.user.dto.UserCreateRequestDto;
 import com.study.goyangrehab.domain.user.dto.UserResponseDto;
 import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
@@ -28,6 +29,7 @@ import java.util.List;
 public class UserController {
     static final Logger logger = LogManager.getLogger(UserController.class);
     private final UserServiceImpl userService;
+    private final PendingServiceImpl pendingService;
 
     @Operation(summary = "유저 조회", description = "user_id로 유저를 조회함")
     @GetMapping("/{id}")
@@ -38,11 +40,14 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "유저 프로그램 내역 확인", description = "유저가 신청했던 프로그램들을 확인합니다.")
     @GetMapping("/programs")
-    public ResponseEntity<List<ProgramResponseDto>> getUserPrograms(){
-        try{
-
-        }catch (EntityNotFoundException e){
+    public ResponseEntity<List<ProgramResponseDto>> getUserPrograms() {
+        try {
+            List<ProgramResponseDto> programResponseDtos = pendingService.getUserPrograms();
+            return ResponseEntity.ok(programResponseDtos);
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
