@@ -7,6 +7,7 @@ import com.study.goyangrehab.domain.board.dto.BoardAddForm;
 import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
 import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +45,7 @@ public class FreeController {
 
     @PostMapping()
     public ResponseEntity<BoardResponseDto> createFree(
-            @ModelAttribute BoardAddForm boardAddForm
+            @Valid @ModelAttribute BoardAddForm boardAddForm
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
         try {
@@ -58,7 +59,7 @@ public class FreeController {
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> updateFree(
             @PathVariable Long id,
-            @ModelAttribute BoardAddForm boardAddForm
+            @Valid @ModelAttribute BoardAddForm boardAddForm
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
         try {

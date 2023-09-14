@@ -1,9 +1,8 @@
 package com.study.goyangrehab.domain.board.entity;
 
 import com.study.goyangrehab.common.BaseTimeEntity;
-import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
-import com.study.goyangrehab.domain.user.entity.User;
+import com.study.goyangrehab.domain.file.entity.Attachment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -64,7 +63,7 @@ public class Board extends BaseTimeEntity {
         this.attachedFiles = attachments;
     }
 
-    public void increaseView(){
+    public void increaseView() {
         this.view = this.getView() + 1;
     }
 

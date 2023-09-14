@@ -9,6 +9,7 @@ import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.enums.NoticeCategory;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<BoardResponseDto> createNotice(
-            @ModelAttribute BoardAddForm boardAddForm,
+            @Valid @ModelAttribute BoardAddForm boardAddForm,
             @RequestBody NoticeCategory category
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
@@ -58,7 +59,7 @@ public class NoticeController {
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> updateNotice(
             @PathVariable Long id,
-            @ModelAttribute BoardAddForm boardAddForm,
+            @Valid @ModelAttribute BoardAddForm boardAddForm,
             @RequestBody NoticeCategory category
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();

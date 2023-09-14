@@ -8,6 +8,7 @@ import com.study.goyangrehab.enums.ProgramStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +74,7 @@ public class NuriController {
     @Operation(summary = "누리 생성", description = "누리 프로그램 생성")
     @PostMapping()
     public ResponseEntity<ProgramResponseDto> createNuri(
-            @ModelAttribute ProgramRequestDto programRequestDto
+            @Valid @ModelAttribute ProgramRequestDto programRequestDto
     ) {
         try {
             ProgramResponseDto programResponseDto = nuriService.createProgram(programRequestDto);
@@ -88,7 +89,7 @@ public class NuriController {
     @PutMapping("/{id}")
     public ResponseEntity<ProgramResponseDto> updateNuri(
             @NotNull @PathVariable Long id,
-            @ModelAttribute ProgramRequestDto programRequestDto
+            @Valid @ModelAttribute ProgramRequestDto programRequestDto
     ) {
         try {
             ProgramResponseDto programResponseDto = nuriService.updateProgram(id, programRequestDto);

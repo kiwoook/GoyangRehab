@@ -9,6 +9,7 @@ import com.study.goyangrehab.domain.user.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
@@ -54,7 +55,7 @@ public class UserController {
 
     @Operation(summary = "유저 생성", description = "createDto를 받고 유저를 생성")
     @PostMapping()
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserCreateRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserCreateRequestDto requestDto) {
         try {
             UserResponseDto userResponseDto = userService.create(requestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
@@ -66,7 +67,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isOwner(authentication, #userId)")
     @Operation(summary = "회원정보 수정", description = "updateDto를 받고 유저 회원정보 수정")
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable String userId, @Valid @RequestBody UserUpdateRequestDto requestDto) {
         try {
             UserResponseDto userResponseDto = userService.update(userId, requestDto);
             return ResponseEntity.ok(userResponseDto);

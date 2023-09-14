@@ -7,6 +7,7 @@ import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.domain.board.dto.EventResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +44,7 @@ public class EventController {
 
     @PostMapping()
     public ResponseEntity<BoardResponseDto> createEvent(
-            @ModelAttribute BoardAddForm boardAddForm,
+            @Valid @ModelAttribute BoardAddForm boardAddForm,
             @RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
@@ -58,7 +59,7 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> updateEvent(
             @PathVariable Long id,
-            @ModelAttribute BoardAddForm boardAddForm,
+            @Valid @ModelAttribute BoardAddForm boardAddForm,
             @RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate date
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();

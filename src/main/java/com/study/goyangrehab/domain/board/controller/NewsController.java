@@ -8,6 +8,7 @@ import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
 import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class NewsController {
 
     @PostMapping()
     public ResponseEntity<BoardResponseDto> createNews(
-            @ModelAttribute BoardAddForm boardAddForm
+            @Valid @ModelAttribute BoardAddForm boardAddForm
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
         try {
@@ -59,7 +60,7 @@ public class NewsController {
     @PutMapping("/{id}")
     public ResponseEntity<BoardResponseDto> updateNews(
             @PathVariable Long id,
-            @ModelAttribute BoardAddForm boardAddForm
+            @Valid @ModelAttribute BoardAddForm boardAddForm
     ) {
         BoardRequestDto boardRequestDto = boardAddForm.createBoardPostDto();
         try {

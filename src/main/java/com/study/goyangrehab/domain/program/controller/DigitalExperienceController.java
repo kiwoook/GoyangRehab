@@ -8,6 +8,7 @@ import com.study.goyangrehab.enums.ProgramStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +75,7 @@ public class DigitalExperienceController {
     @Operation(summary = "디지털 체험 생성", description = "디지털 체험 프로그램 생성")
     @PostMapping()
     public ResponseEntity<ProgramResponseDto> createDigitalExperience(
-            @ModelAttribute ProgramRequestDto programRequestDto
+            @Valid @ModelAttribute ProgramRequestDto programRequestDto
     ) {
         try {
             ProgramResponseDto programResponseDto = digitalExperienceService.createProgram(programRequestDto);
@@ -89,7 +90,7 @@ public class DigitalExperienceController {
     @PutMapping("/{id}")
     public ResponseEntity<ProgramResponseDto> updateDigitalExperience(
             @NotNull @PathVariable Long id,
-            @ModelAttribute ProgramRequestDto programRequestDto
+            @Valid @ModelAttribute ProgramRequestDto programRequestDto
     ) {
         try {
             ProgramResponseDto programResponseDto = digitalExperienceService.updateProgram(id, programRequestDto);

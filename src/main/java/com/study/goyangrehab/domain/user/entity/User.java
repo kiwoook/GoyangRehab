@@ -6,6 +6,7 @@ import com.study.goyangrehab.common.BaseTimeEntity;
 import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
 import com.study.goyangrehab.enums.UserAuthority;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,7 +54,7 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.roles.add(userRole);
     }
 
-    public void update(UserUpdateRequestDto requestDto) {
+    public void update(@Valid UserUpdateRequestDto requestDto) {
         this.password = requestDto.getPassword();
     }
 

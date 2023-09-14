@@ -19,7 +19,6 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -91,7 +90,7 @@ public class TokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        if (claims.get(AUTHORITIES_KEY) == null){
+        if (claims.get(AUTHORITIES_KEY) == null) {
             throw new NullPointerException("권한 정보가 없는 토큰");
         }
 
@@ -120,31 +119,6 @@ public class TokenProvider {
             logger.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
-    }
-
-
-
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-
-    }
-
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = extractExpiration(token);
-        return expiration.before(new Date());
     }
 
 

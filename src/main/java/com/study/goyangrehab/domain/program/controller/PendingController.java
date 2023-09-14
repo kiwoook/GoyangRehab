@@ -87,7 +87,6 @@ public class PendingController {
         }
     }
 
-    // TODO 유저의 프로그램 신청 내역 확인
     @Operation(summary = "프로그램 취소", description = "해당 유저나 어드민이 대기 중인 프로그램 취소")
     @DeleteMapping("/{programId}")
     public ResponseEntity<UserResponseDto> cancelProgram(@PathVariable Long programId) {

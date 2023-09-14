@@ -50,13 +50,8 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 .exceptionHandling(except -> except
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            // 권한 오류 처리 로직을 작성합니다.
-                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
-                        }))
+                        .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden")))
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
