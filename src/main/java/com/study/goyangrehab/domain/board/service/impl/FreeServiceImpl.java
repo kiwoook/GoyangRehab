@@ -11,7 +11,6 @@ import com.study.goyangrehab.domain.board.service.FreeService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
 import com.study.goyangrehab.domain.file.service.AttachmentService;
-import com.study.goyangrehab.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

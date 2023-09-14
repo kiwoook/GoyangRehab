@@ -3,7 +3,6 @@ package com.study.goyangrehab.domain.user.service;
 import com.study.goyangrehab.domain.user.dto.UserCreateRequestDto;
 import com.study.goyangrehab.domain.user.dto.UserResponseDto;
 import com.study.goyangrehab.domain.user.dto.UserUpdateRequestDto;
-import com.study.goyangrehab.domain.user.entity.User;
 import org.springframework.security.core.Authentication;
 
 public interface UserService {

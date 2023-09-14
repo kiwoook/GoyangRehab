@@ -1,10 +1,12 @@
 package com.study.goyangrehab.domain.board.dto;
 
 import com.study.goyangrehab.domain.board.entity.Board;
-import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.enums.AttachmentType;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class BoardRequestDto {
         this.attachmentFiles = attachmentFiles;
     }
 
-    public Board toEntity(String userId){
+    public Board toEntity(String userId) {
         return Board.builder()
                 .title(title)
                 .content(content)

@@ -79,14 +79,14 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isOwner(authentication, #userId)")
     @Operation(summary = "유저 삭제", description = "유저 삭제. 단, Admin과 해당 회원만 삭제 가능")
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable String userId) {
         userService.delete(userId);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "아이디 중복 확인", description = "파라미터로 userID 받고 중복 확인")
     @GetMapping("/{userId}")
-    public ResponseEntity<?> duplicateUserId(@PathVariable String userId) {
+    public ResponseEntity<String> duplicateUserId(@PathVariable String userId) {
         if (userService.isUserIdAvailable(userId)) {
             return ResponseEntity.ok().build();
         } else {
@@ -96,7 +96,7 @@ public class UserController {
 
     @Operation(summary = "닉네임 중복 확인", description = "파라미터로 name 받고 중복 확인")
     @GetMapping("/{name}")
-    public ResponseEntity<?> duplicateName(@PathVariable String name) {
+    public ResponseEntity<String> duplicateName(@PathVariable String name) {
         if (userService.isNicknameAvailable(name)) {
             return ResponseEntity.ok().build();
         } else {

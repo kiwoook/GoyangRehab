@@ -84,7 +84,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public Board createBoard(List<Attachment> attachments, BoardRequestDto boardRequestDto) throws IOException {
+    public Board createBoard(List<Attachment> attachments, BoardRequestDto boardRequestDto) throws UsernameNotFoundException{
         for (Attachment attachment : attachments) {
             logger.info(attachment.getOriginFilename());
         }

@@ -42,7 +42,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @ElementCollection(targetClass = UserAuthority.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<UserAuthority> roles = new HashSet<>();
+    private final Set<UserAuthority> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<UserProgram> programs = new HashSet<>();

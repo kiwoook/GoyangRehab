@@ -25,7 +25,7 @@ public interface BoardService {
 
     List<BoardResponseDto> search(int page, SearchType searchType, BoardCategory category, String query);
 
-    Board createBoard(List<Attachment> attachments, BoardRequestDto boardRequestDto) throws IOException, UsernameNotFoundException;
+    Board createBoard(List<Attachment> attachments, BoardRequestDto boardRequestDto) throws UsernameNotFoundException;
 
     Board update(Long id, BoardRequestDto boardRequestDto) throws IOException;
     void deleteBoard(Long id);

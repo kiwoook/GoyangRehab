@@ -2,10 +2,8 @@ package com.study.goyangrehab.domain.program.service.impl;
 
 import com.study.goyangrehab.domain.program.dto.ProgramRequestDto;
 import com.study.goyangrehab.domain.program.dto.ProgramResponseDto;
-import com.study.goyangrehab.domain.program.entity.Arte;
 import com.study.goyangrehab.domain.program.entity.NuriClass;
 import com.study.goyangrehab.domain.program.entity.Program;
-import com.study.goyangrehab.domain.program.repository.ArteRepository;
 import com.study.goyangrehab.domain.program.repository.NuriRepository;
 import com.study.goyangrehab.domain.program.repository.ProgramRepository;
 import com.study.goyangrehab.domain.program.service.NuriService;
@@ -32,9 +30,9 @@ public class NuriServiceImpl implements NuriService {
 
     @Override
     public List<ProgramResponseDto> getAllInRange() {
-        List<Program> programList= programRepository.findAllInRange(ProgramCategory.ARTE);
+        List<Program> programList = programRepository.findAllInRange(ProgramCategory.ARTE);
 
-        if (programList.isEmpty()){
+        if (programList.isEmpty()) {
             throw new EntityNotFoundException("ProgramList is Empty");
         }
 

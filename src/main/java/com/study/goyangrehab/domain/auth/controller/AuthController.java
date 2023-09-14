@@ -78,7 +78,7 @@ public class AuthController {
     // TODO 권한 부여
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{userId}")
-    public ResponseEntity<?> grantRole(
+    public ResponseEntity<String> grantRole(
             @PathVariable String userId,
             @RequestBody UserAuthority authority) {
         return null;

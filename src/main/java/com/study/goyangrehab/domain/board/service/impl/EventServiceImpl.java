@@ -1,5 +1,7 @@
 package com.study.goyangrehab.domain.board.service.impl;
 
+import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
+import com.study.goyangrehab.domain.board.dto.EventResponseDto;
 import com.study.goyangrehab.domain.board.entity.Board;
 import com.study.goyangrehab.domain.board.entity.boards.Event;
 import com.study.goyangrehab.domain.board.repository.BoardRepository;
@@ -7,17 +9,12 @@ import com.study.goyangrehab.domain.board.repository.EventRepository;
 import com.study.goyangrehab.domain.board.service.EventService;
 import com.study.goyangrehab.domain.board.util.Util;
 import com.study.goyangrehab.domain.file.entity.Attachment;
-import com.study.goyangrehab.domain.board.dto.BoardRequestDto;
-import com.study.goyangrehab.domain.board.dto.EventResponseDto;
 import com.study.goyangrehab.domain.file.service.AttachmentService;
-import com.study.goyangrehab.domain.user.entity.User;
 import com.study.goyangrehab.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +43,7 @@ public class EventServiceImpl implements EventService {
                 .map(EventResponseDto::new)
                 .toList();
     }
+
     @Transactional
     @Override
     public void createEvent(BoardRequestDto boardRequestDto, LocalDate date) throws IOException, UsernameNotFoundException {

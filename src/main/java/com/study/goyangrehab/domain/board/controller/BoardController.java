@@ -1,6 +1,5 @@
 package com.study.goyangrehab.domain.board.controller;
 
-import com.study.goyangrehab.domain.auth.UserAuthorize;
 import com.study.goyangrehab.domain.board.dto.BoardAddForm;
 import com.study.goyangrehab.domain.board.dto.BoardResponseDto;
 import com.study.goyangrehab.domain.board.service.impl.BoardServiceImpl;
@@ -20,9 +19,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,10 +33,6 @@ public class BoardController {
     static final Logger logger = LogManager.getLogger(BoardController.class);
     private static final String VIEW_COOKIE = "goyang_rehab_viewed_";
     private final BoardServiceImpl boardService;
-    @PostMapping
-    public ResponseEntity<BoardResponseDto> createBoard(@ModelAttribute BoardAddForm boardAddForm) {
-        return null;
-    }
 
     // READ
 
@@ -77,7 +69,7 @@ public class BoardController {
 
 
     // DELETE
-    @PreAuthorize("hasRole('ADMIN') or @boardServiceImpl.isOwner(authentication, #id)" )
+    @PreAuthorize("hasRole('ADMIN') or @boardServiceImpl.isOwner(authentication, #id)")
     @Operation(summary = "게시글 ID 삭제", description = "파라미터 id 값을 활용해 게시글을 삭제합니다.")
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardResponseDto> deleteBoard(
